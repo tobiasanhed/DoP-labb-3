@@ -97,12 +97,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)\Bibliotek;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\Bibliotek;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\gast\Desktop\PCLIBS\include;$(SolutionDir)\Bibliotek;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\gast\Desktop\PCLIBS\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(Projectpath)\DoP laboration 3\Bibliotek;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\gast\Desktop\PCLIBS\include;$(Projectpath)\DoP laboration 3\Bibliotek;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\gast\Desktop\PCLIBS\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

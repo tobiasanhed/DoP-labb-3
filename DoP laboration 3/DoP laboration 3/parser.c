@@ -6,12 +6,14 @@
 #include "exp.h"
 #include "scanadt.h"
 
+/*Private functions*/
 static expADT readE(scannerADT scanner);
 static expADT readT(scannerADT scanner);
 static expADT readC(scannerADT scanner);
 static expADT readF(scannerADT scanner);
 static bool  isRelOperator(char op);
 
+/*Helper functions*/
 static expADT ifClause(scannerADT scanner);
 static expADT functionWithArgument(scannerADT scanner);
 
