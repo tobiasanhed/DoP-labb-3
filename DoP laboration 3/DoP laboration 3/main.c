@@ -8,10 +8,13 @@
 
 #include "cmdTable.h"
 #include "exception.h"
+#include "scanadt.h"
+#include "exp.h"
+#include "print.h"
 
 /* Main program */
 
-main(){
+/*main(){
 
 	string line;
 
@@ -25,17 +28,20 @@ main(){
 		}endtry
 	}
 }
+*/
 
-/*void interprator(){
+
+//Use this main to test parser.
+void main(void){
 
 	scannerADT scanner;
-	expressionADT exp;
+	expADT exp;
 	string line;
 	int value;
 
 	printf("Expression interpreter (type \"quit\" to exit)\n\n");
 
-	InitVariableTable();
+	//InitVariableTable();
 	scanner = NewScanner();
 	SetScannerSpaceOption(scanner, IgnoreSpaces);
 
@@ -48,10 +54,10 @@ main(){
 			if (StringEqual(line, "quit")) exit(0);
 			SetScannerString(scanner, line);
 			exp = ParseExp(scanner);
-			value = EvalExp(exp);
-			printf("%d\n", value);
+			//value = EvalExp(exp);
+			PrintExp(exp);
 			except(ErrorException)
 				printf("Error: %s\n", (string)GetExceptionValue());
 		} endtry
 	}
-}*/
+}
