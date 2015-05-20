@@ -33,7 +33,12 @@ void PrintExp(expADT exp){
 	switch (ExpType(exp)){
 
 	case FuncExp:
-		printf("Function with one argument.\n");
+		printf(" func ");
+		printf("(%s) ", GetFuncFormalArg(exp));
+		printf(" { ");
+		PrintExp(GetFuncBody(exp));
+		printf(" } ");
+ 		//printf("Function with one argument.\n");
 		break;
 
 	case IfExp:
@@ -49,7 +54,11 @@ void PrintExp(expADT exp){
 		break;
 
 	case CallExp:
-		printf("Function call.\n");
+		PrintExp(GetCallExp(exp));
+		printf(" ( ");
+		PrintExp(GetCallActualArg(exp));
+		printf(" ) ");
+		//printf("Function call.\n");
 		break;
 
 	case ConstExp:

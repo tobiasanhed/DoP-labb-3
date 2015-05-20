@@ -59,8 +59,8 @@ void main(void){
 			}
 			SetScannerString(scanner, line);
 			exp = ParseExp(scanner);
-			value = Eval(exp, environ); printf("\n");
-			//PrintExp(exp); printf("\n");
+			PrintExp(exp); printf("\n");
+			//value = Eval(exp, environ); printf("\n");
 			except(ErrorException)
 				printf("Error: %s\n", (string)GetExceptionValue());
 		} endtry
