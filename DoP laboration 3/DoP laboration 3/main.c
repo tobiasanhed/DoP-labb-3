@@ -38,6 +38,7 @@ void main(void){
 	expADT exp;
 	string line;
 	int value;
+	environmentADT environ ;
 
 	printf("Expression interpreter (type \"quit\" to exit)\n\n");
 
@@ -45,7 +46,7 @@ void main(void){
 	scanner = NewScanner();
 	SetScannerSpaceOption(scanner, IgnoreSpaces);
 
-
+	environ = NewEnvironment();
 
 	while (TRUE) {
 		try {
@@ -57,7 +58,7 @@ void main(void){
 			}
 			SetScannerString(scanner, line);
 			exp = ParseExp(scanner);
-			//value = EvalExp(exp);
+			//value = EvalExp(exp, environ);
 			PrintExp(exp); printf("\n");
 			except(ErrorException)
 				printf("Error: %s\n", (string)GetExceptionValue());

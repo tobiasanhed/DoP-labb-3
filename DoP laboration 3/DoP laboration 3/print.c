@@ -74,6 +74,7 @@ void PrintExp(expADT exp){
 		;
 	}
 }
+
 void PrintValue(valueADT value){
 	
 	if (ValueType(value) == IntValue)

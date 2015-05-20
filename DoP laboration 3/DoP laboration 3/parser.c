@@ -159,6 +159,7 @@ static expADT readF(scannerADT scanner){
 	token = ReadToken(scanner);
 
 	if (StringEqual(token, "(")){     // F :: = (E)
+		//SaveToken(scanner, token);
 		exp = readE(scanner);
 
 		if (!StringEqual(ReadToken(scanner), ")"))
@@ -210,8 +211,8 @@ static expADT ifClause(scannerADT scanner){
 				elsePart = readE(scanner);  // E after else
 				exp = NewIfExp(lhs, relOp, rhs, ifPart, elsePart);
 			}
-			else
-				Error("else is missing from if-expression.\n");
+			//else
+				//Error("else is missing from if-expression.\n");
 		}
 		else
 			Error("then is missing from if-expression.\n");
