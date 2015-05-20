@@ -38,16 +38,19 @@ void main(void){
 	scannerADT scanner;
 	expADT exp;
 	string line;
-	int value;
+	valueADT value;
 	environmentADT environ ;
 
 	printf("Expression interpreter (type \"quit\" to exit)\n\n");
 
-	//InitVariableTable();
+	InitCommandTable();
+	InitVariableTable();
 	scanner = NewScanner();
 	SetScannerSpaceOption(scanner, IgnoreSpaces);
 
 	environ = NewEnvironment();
+
+
 
 	while (TRUE) {
 		try {
@@ -57,10 +60,15 @@ void main(void){
 				FreeScanner(scanner);
 				exit(0);
 			}
-			SetScannerString(scanner, line);
-			exp = ParseExp(scanner);
-			PrintExp(exp); printf("\n");
-			//value = Eval(exp, environ); printf("\n");
+			if (StringEqual(":", CharToString(line[0])))
+				ExecuteCommand(line);
+			else{
+				SetScannerString(scanner, line);
+				exp = ParseExp(scanner);
+				PrintExp(exp); printf("\n");
+				value = Eval(exp, environ); printf("\n");
+				PrintValue(value);
+			}
 			except(ErrorException)
 				printf("Error: %s\n", (string)GetExceptionValue());
 		} endtry

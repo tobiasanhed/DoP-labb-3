@@ -13,6 +13,7 @@
 #include "simpio.h"
 #include "symtab.h"
 #include "scanadt.h"
+#include "eval.h"
 
 /*
 * Type: commandFnT
@@ -46,8 +47,8 @@ static symtabADT commandTable;
 /* Local function declarations */
 
 static void defineCommand(string cmd, commandFnT fn);
-static void loadCmd(string cmd);
-static void defineValueCmd(string cmd);
+static void loadCmd(scannerADT scanner);
+static void defineValueCmd(scannerADT scanner);
 static void helpCmd(void);
 static void quitCmd(void);
 
@@ -94,7 +95,7 @@ void ExecuteCommand(string cmd){
 		return;
 	}
 	if (StringEqual(token, ":l") || StringEqual(token, ":load") || StringEqual(token, ":d") || StringEqual(token, ":define"))
-		entry->fn(ReadToken(scanner));
+		entry->fn(scanner);
 	else
 		entry->fn();
 
@@ -108,9 +109,15 @@ static void loadCmd(string cmd)
 	printf("Command = load %s\n", cmd);
 }
 
-static void defineValueCmd(string cmd)
+static void defineValueCmd(scannerADT scanner)
 {
-	printf("Command = define value %s\n", cmd);
+	string variable,
+		value;
+	variable = ReadToken(scanner);
+	value = ReadToken(scanner);
+
+	SetIdentifierValue(variable, StringToInteger(value));
+	//printf("Command = define value %s\n", cmd);
 }
 
 static void helpCmd(void)
