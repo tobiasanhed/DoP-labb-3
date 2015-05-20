@@ -1,12 +1,15 @@
 #include "value.h"
 
-
 valueADT Eval(expADT exp, environmentADT env){
 	
 	switch (ExpType(exp)){
 
 	case FuncExp:
-		printf("Function with one argument.\n");
+		printf(" func ");
+		printf("(%s) ", GetFuncFormalArg(exp));
+		printf(" { ");
+		Eval(GetFuncBody(exp), env);
+		printf(" } ");
 		break;
 
 	case IfExp:
@@ -22,7 +25,11 @@ valueADT Eval(expADT exp, environmentADT env){
 		break;
 
 	case CallExp:
-		printf("Function call.\n");
+		Eval(GetCallExp(exp), env);
+		printf(" ( ");
+		Eval(GetCallActualArg(exp),env);
+		printf(" ) ");
+		//printf("Function call.\n");
 		break;
 
 	case ConstExp:
