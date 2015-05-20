@@ -55,7 +55,7 @@ void main(void){
 			SetScannerString(scanner, line);
 			exp = ParseExp(scanner);
 			//value = EvalExp(exp);
-			PrintExp(exp);
+			PrintExp(exp); printf("\n");
 			except(ErrorException)
 				printf("Error: %s\n", (string)GetExceptionValue());
 		} endtry

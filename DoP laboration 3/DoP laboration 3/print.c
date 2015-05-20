@@ -1,8 +1,34 @@
 #include "value.h"
 #include "exp.h"
 
+
+/*  For FuncExprExp */
+//string GetFuncFormalArg(expADT exp);
+//expADT GetFuncBody(expADT exp);
+
+/*  For IfExp */
+//expADT GetIfLHSExpression(expADT exp);
+//expADT GetIfRHSExpression(expADT exp);
+//char   GetIfRelOp(expADT exp);
+////expADT GetIfThenPart(expADT exp);
+//expADT GetIfElsePart(expADT exp);
+
+/*  For FuncCallExp */
+//expADT GetCallExp(expADT exp);
+//expADT GetCallActualArg(expADT exp);
+
+/*  For ConstExp */
+//int ExpInteger(expADT exp);
+
+/*  For IdentifierExp */
+//string ExpIdentifier(expADT exp);
+
+/*  For CompoundExp */
+//char ExpOperator(expADT exp);
+//expADT ExpLHS(expADT exp);
+//expADT ExpRHS(expADT exp); */
+
 void PrintExp(expADT exp){
-	
 	
 	switch (ExpType(exp)){
 
@@ -11,7 +37,15 @@ void PrintExp(expADT exp){
 		break;
 
 	case IfExp:
-		printf("IF-expression.\n");
+		//printf("IF-expression.\n");
+		printf("if ");
+		PrintExp(GetIfLHSExpression(exp));
+		printf(" %c ", GetIfRelOp(exp));
+		PrintExp(GetIfRHSExpression(exp));
+		printf(" then ");
+		PrintExp(GetIfThenPart(exp));
+		printf(" else ");
+		PrintExp(GetIfElsePart(exp));
 		break;
 
 	case CallExp:
@@ -19,15 +53,21 @@ void PrintExp(expADT exp){
 		break;
 
 	case ConstExp:
-		printf("Integer.\n");
+		printf(" %d ", ExpInteger(exp));
+		//printf("Integer.\n");
 		break;
 
 	case IdentifierExp:
-		printf("Variable.\n");
+		printf(" %s ", ExpIdentifier(exp));
+		//printf("Variable.\n");
 		break;
 
 	case CompoundExp:
-		printf("Compound expression.\n");
+		//printf("Compound expression.\n");
+		PrintExp(ExpLHS(exp));
+		printf(" %c ", ExpOperator(exp));
+		PrintExp(ExpRHS(exp));
+		
 		break;
 
 	default:
