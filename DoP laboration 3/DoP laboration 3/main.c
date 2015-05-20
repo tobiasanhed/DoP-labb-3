@@ -11,6 +11,7 @@
 #include "scanadt.h"
 #include "exp.h"
 #include "print.h"
+#include "eval.h"
 
 /* Main program */
 
@@ -58,8 +59,8 @@ void main(void){
 			}
 			SetScannerString(scanner, line);
 			exp = ParseExp(scanner);
-			//value = EvalExp(exp, environ);
-			PrintExp(exp); printf("\n");
+			value = Eval(exp, environ); printf("\n");
+			//PrintExp(exp); printf("\n");
 			except(ErrorException)
 				printf("Error: %s\n", (string)GetExceptionValue());
 		} endtry
