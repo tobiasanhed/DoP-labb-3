@@ -1,33 +1,6 @@
 #include "value.h"
 #include "exp.h"
 
-
-/*  For FuncExprExp */
-//string GetFuncFormalArg(expADT exp);
-//expADT GetFuncBody(expADT exp);
-
-/*  For IfExp */
-//expADT GetIfLHSExpression(expADT exp);
-//expADT GetIfRHSExpression(expADT exp);
-//char   GetIfRelOp(expADT exp);
-////expADT GetIfThenPart(expADT exp);
-//expADT GetIfElsePart(expADT exp);
-
-/*  For FuncCallExp */
-//expADT GetCallExp(expADT exp);
-//expADT GetCallActualArg(expADT exp);
-
-/*  For ConstExp */
-//int ExpInteger(expADT exp);
-
-/*  For IdentifierExp */
-//string ExpIdentifier(expADT exp);
-
-/*  For CompoundExp */
-//char ExpOperator(expADT exp);
-//expADT ExpLHS(expADT exp);
-//expADT ExpRHS(expADT exp); */
-
 void PrintExp(expADT exp){
 	
 	switch (ExpType(exp)){
