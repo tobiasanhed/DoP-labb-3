@@ -18,12 +18,17 @@ static expADT ifClause(scannerADT scanner);
 static expADT functionWithArgument(scannerADT scanner);
 
 
+static expADT equalSignE(scannerADT scanner);
+
+
+
 expADT ParseExp(scannerADT scanner){
 
 	expADT exp = NULL;
 
 
-	exp = readE(scanner);			
+	//exp = equalSignE(scanner);
+	exp = readE(scanner);
 
 	if (MoreTokensExist(scanner))
 		Error("ParseExp: %s unexpected tokens left in scannner.\n", ReadToken(scanner));
@@ -31,6 +36,34 @@ expADT ParseExp(scannerADT scanner){
 	printf("%s\n", __FUNCTION__);
 	return exp;
 }
+
+/*
+static expADT equalSignE(scannerADT scanner){
+	//       
+	expADT exp = NULL;
+	string token;
+	char op;
+	expADT lhs, rhs;
+	                               //Def ::= identifier = E
+	exp = readE(scanner);			//identifier  
+
+
+	token = ReadToken(scanner);  // = 
+
+	if (StringEqual(token, "=")){
+		lhs = exp;
+		rhs = readE(scanner);    // E after =
+		op = token[0];
+		exp = NewCompoundExp(op, lhs, rhs);
+	}
+	else
+		SaveToken(scanner, token);  //  Not an expression with =
+
+	printf("%s\n", __FUNCTION__);
+	return exp;
+
+
+}*/
 
 /*
 * Function: readE

@@ -5,16 +5,14 @@ static int EvalCompound(expADT exp);
 
 static symtabADT variableTable;
 
+expADT myexp;
+
 valueADT Eval(expADT exp, environmentADT env){
 	
 	switch (ExpType(exp)){
 
 	case FuncExp:
-		printf(" func ");
-		printf("(%s) ", GetFuncFormalArg(exp));
-		printf(" { ");
-		Eval(GetFuncBody(exp), env);
-		printf(" } ");
+		return NewFuncValue(GetFuncFormalArg(exp), GetFuncBody(exp), env);
 		break;
 
 	case IfExp:
@@ -30,33 +28,26 @@ valueADT Eval(expADT exp, environmentADT env){
 		break;
 
 	case CallExp:
-		Eval(GetCallExp(exp), env);
-		printf(" ( ");
-		Eval(GetCallActualArg(exp),env);
-		printf(" ) ");
-		//printf("Function call.\n");
+		
+		myexp = NewCallExp(GetCallExp(exp), GetCallActualArg(exp));
+		
+		if (ExpType(GetCallActualArg(exp)) == CompoundExp)
+			NewIntegerValue(EvalCompound(GetCallActualArg(exp), env));
+		else
+			Eval(GetCallActualArg(exp), env);
 		break;
 
 	case ConstExp:
 		return NewIntegerValue(ExpInteger(exp));
-		//printf(" %d ", ExpInteger(exp));
-		//printf("Integer.\n");
 		break;
 
 	case IdentifierExp:
 		printf(" %s ", ExpIdentifier(exp));
 		return NewIntegerValue(GetIdentifierValueE(ExpIdentifier(exp)));
-		//printf("Variable.\n");
 		break;
 
 	case CompoundExp:
-		//printf("Compound expression.\n");
-		//Eval(ExpLHS(exp), env);
-		//printf(" %d ", EvalCompound(exp, env));
 		return NewIntegerValue(EvalCompound(exp, env));
-		//printf(" %c ", ExpOperator(exp));
-		//Eval(ExpRHS(exp), env);
-		
 		break;
 
 	default:
