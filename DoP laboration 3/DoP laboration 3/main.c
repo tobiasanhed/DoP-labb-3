@@ -51,7 +51,10 @@ void main(void){
 		try {
 			printf("=> ");
 			line = GetLine();
-			if (StringEqual(line, "quit")) exit(0);
+			if (StringEqual(line, ":quit") || StringEqual(line, ":q")){
+				FreeScanner(scanner);
+				exit(0);
+			}
 			SetScannerString(scanner, line);
 			exp = ParseExp(scanner);
 			//value = EvalExp(exp);
