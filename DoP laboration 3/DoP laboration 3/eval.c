@@ -2,6 +2,8 @@
 #include "symtab.h"
 #include "env.h"
 
+#define MAXRECURSION 4000
+
 static int EvalCompound(expADT exp);
 static void senseRecursion();
 //static symtabADT variableTable;
@@ -118,7 +120,7 @@ static void senseRecursion(){
 
 	countRecursion++;
 
-	if (countRecursion > 4000){
+	if (countRecursion > MAXRECURSION){
 		countRecursion = 0;
 		Error("\n\nToo deep recursion... cannot continue calculation.\n");
 	}
