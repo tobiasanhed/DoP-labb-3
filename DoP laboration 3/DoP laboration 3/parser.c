@@ -206,7 +206,7 @@ static expADT readF(scannerADT scanner){
 	}
 	else if (isdigit(token[0])){           //F ::= integer  
 		//exp = NewIntegerExp(StringToInteger(token));
-		//exp = NewFuncExp(NULL, body);
+		exp = NewFuncExp("", NewIntegerExp(StringToInteger(token)));
 	}
 	else if (isalpha(token[0])){            //F ::= identifier  
 		exp = NewIdentifierExp(token);
