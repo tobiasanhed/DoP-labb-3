@@ -46,7 +46,13 @@ valueADT Eval(expADT exp, environmentADT env){
 
 			callexpress = GetCallExp(exp); //  f in f(E)
 			callarg = GetCallActualArg(exp);  // E in f(E)
-			funcBody= GetFuncBody(callarg);  //body of E in f(E)
+
+			if (ExpType(callarg) == CallExp){
+				value = Eval(callarg, env);
+				funcBody = NewFuncExp("", NewIntegerExp( GetIntValue(value)));
+			}
+			else
+				funcBody= GetFuncBody(callarg);  //body of E in f(E)
 
 			funcname = ExpIdentifier(callexpress); // f
 
