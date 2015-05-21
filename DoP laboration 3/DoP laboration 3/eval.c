@@ -15,6 +15,7 @@ valueADT Eval(expADT exp, environmentADT env){
 	string funcarg;
 	valueADT value;
 	environmentADT newEnviron;
+	expADT callexpress, callarg;
 
 	switch (ExpType(exp)){
 
@@ -46,9 +47,11 @@ valueADT Eval(expADT exp, environmentADT env){
 		}
 		else{
 			newEnviron = NewClosure(env);
-			funcarg = GetFuncFormalArg(GetCallActualArg(exp));
-			DefineIdentifier(newEnviron, funcarg, GetCallActualArg(exp), newEnviron);
-			return Eval(GetFuncBody(exp), newEnviron);
+			callexpress = GetCallExp(exp);
+			callarg = GetCallActualArg(callexpress);
+			//funcarg = GetCallActualArg(exp);//GetFuncFormalArg(GetCallActualArg(exp));
+			//DefineIdentifier(newEnviron, funcarg, GetCallActualArg(exp), newEnviron);
+			return Eval(callarg, env);//Eval(GetFuncBody(exp), newEnviron);
 
 			//result = Eval(GetCallActualArg(exp), env);
 			//Eval(GetFuncBody(exp), env);
