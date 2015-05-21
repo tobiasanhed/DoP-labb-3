@@ -17,15 +17,14 @@ static bool  isRelOperator(char op);
 static expADT ifClause(scannerADT scanner);
 static expADT functionWithArgument(scannerADT scanner);
 
-
 static expADT equalSignE(scannerADT scanner);
 
 
 
 expADT ParseExp(scannerADT scanner){
 
-	expADT exp = NULL;
 
+	expADT exp = NULL;
 
 	//exp = equalSignE(scanner);
 	exp = readE(scanner);

@@ -3,7 +3,7 @@
 #include "env.h"
 
 static int EvalCompound(expADT exp);
-
+static void senseRecursion();
 //static symtabADT variableTable;
 
 
@@ -12,10 +12,13 @@ valueADT result,
 expADT myexp;
 
 valueADT Eval(expADT exp, environmentADT env){
+
 	string funcarg, funcname;
 	valueADT value, idexpress;
 	environmentADT newEnviron;
 	expADT callexpress, callarg, storedBody, funcBody;
+
+	senseRecursion();
 
 	switch (ExpType(exp)){
 
@@ -106,4 +109,18 @@ static int EvalCompound(expADT exp, environmentADT env)
       case '/': return (lhs / rhs);
       default:  Error("Illegal operator");
     }
+}
+
+
+static void senseRecursion(){
+
+	static int countRecursion = 0;
+
+	countRecursion++;
+
+	if (countRecursion > 4000){
+		countRecursion = 0;
+		Error("\n\nToo deep recursion... cannot continue calculation.\n");
+	}
+
 }
