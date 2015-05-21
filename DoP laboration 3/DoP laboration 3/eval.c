@@ -13,12 +13,14 @@ expADT myexp;
 
 valueADT Eval(expADT exp, environmentADT env){
 	string funcarg;
+	valueADT value;
+	environmentADT newEnviron;
 
 	switch (ExpType(exp)){
 
 	case FuncExp:
 		//GetIdentifierValueE();
-		return NewFuncValue(GetFuncFormalArg(exp), GetFuncBody(exp), env);
+		return Eval(GetFuncBody(exp), env);//NewIntegerValue(EvalCompound(exp, env));//NewFuncValue(GetFuncFormalArg(exp), GetFuncBody(exp), env);
 		break;
 
 	case IfExp:
@@ -39,12 +41,18 @@ valueADT Eval(expADT exp, environmentADT env){
 		
 		if (ExpType(GetCallActualArg(exp)) == CompoundExp){
 			result = NewIntegerValue(EvalCompound(GetCallActualArg(exp), env));
-			funcarg = GetFuncFormalArg(exp);
+			//funcarg = GetFuncFormalArg(exp);
 			//temp = Eval(GetFuncBody(exp), env);
 		}
 		else{
-			result = Eval(GetCallActualArg(exp), env);
-			funcarg = GetFuncFormalArg(exp);
+			newEnviron = NewClosure(env);
+			DefineIdentifier(newEnviron, GetFuncFormalArg(GetCallExp(exp)), GetCallActualArg(exp), newEnviron);
+			return Eval(GetFuncBody(exp), newEnviron);
+
+			//result = Eval(GetCallActualArg(exp), env);
+			//Eval(GetFuncBody(exp), env);
+			//return result;
+			//funcarg = GetFuncFormalArg(exp);
 			//temp = Eval(GetFuncBody(exp), env);
 		}
 		break;
@@ -55,7 +63,10 @@ valueADT Eval(expADT exp, environmentADT env){
 
 	case IdentifierExp:
 		printf(" %s ", ExpIdentifier(exp));
-		return (GetIdentifierValue(environment, ExpIdentifier(exp)));
+		value = GetIdentifierValue(environment, ExpIdentifier(exp));
+		//if(ValueType(value) == FuncValue)
+			
+		return Eval(GetFuncValueBody(value), env);
 		break;
 
 	case CompoundExp:
