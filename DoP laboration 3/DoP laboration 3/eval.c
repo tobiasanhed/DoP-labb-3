@@ -26,14 +26,14 @@ valueADT Eval(expADT exp, environmentADT env){
 
 	case IfExp:
 		//printf("IF-expression.\n");
-		printf("if ");
-		Eval(GetIfLHSExpression(exp), env);
-		printf(" %c ", GetIfRelOp(exp));
-		Eval(GetIfRHSExpression(exp), env);
+		printf("if ");						// if expression not working at all
+		Eval(GetIfLHSExpression(exp), env);  // 3 i 3 < 4
+		printf(" %c ", GetIfRelOp(exp));     // <
+		Eval(GetIfRHSExpression(exp), env);  // 4
 		printf(" then ");
-		Eval(GetIfThenPart(exp), env);
+		Eval(GetIfThenPart(exp), env);        //compoundexpr eller func
 		printf(" else ");
-		Eval(GetIfElsePart(exp), env);
+		Eval(GetIfElsePart(exp), env);       //compoundexpr  eller func
 		break;
 
 	case CallExp:
