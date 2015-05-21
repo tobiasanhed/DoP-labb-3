@@ -10,6 +10,8 @@
 #include "symtab.h"
 #include "value.h"
 
+
+
 typedef struct environmentCDT {
 	symtabADT      definitions;
     environmentADT parent;

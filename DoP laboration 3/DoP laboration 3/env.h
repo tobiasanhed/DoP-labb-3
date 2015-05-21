@@ -58,6 +58,7 @@ valueADT GetIdentifierValue(environmentADT env, string name);
  * For global definitions env and ctx will be the same but this is not always
  * the case, e.g. for actual arguments in function calls.
  */
+environmentADT environment;
 
 void DefineIdentifier(environmentADT env, string name, expADT exp, environmentADT context);
 

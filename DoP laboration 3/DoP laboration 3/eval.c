@@ -1,17 +1,23 @@
 #include "value.h"
 #include "symtab.h"
+#include "env.h"
 
 static int EvalCompound(expADT exp);
 
-static symtabADT variableTable;
+//static symtabADT variableTable;
 
+
+valueADT result,
+	temp;
 expADT myexp;
 
 valueADT Eval(expADT exp, environmentADT env){
-	
+	string funcarg;
+
 	switch (ExpType(exp)){
 
 	case FuncExp:
+		//GetIdentifierValueE();
 		return NewFuncValue(GetFuncFormalArg(exp), GetFuncBody(exp), env);
 		break;
 
@@ -29,12 +35,18 @@ valueADT Eval(expADT exp, environmentADT env){
 
 	case CallExp:
 		
-		myexp = NewCallExp(GetCallExp(exp), GetCallActualArg(exp));
+		//myexp = NewCallExp(GetCallExp(exp), GetCallActualArg(exp));
 		
-		if (ExpType(GetCallActualArg(exp)) == CompoundExp)
-			NewIntegerValue(EvalCompound(GetCallActualArg(exp), env));
-		else
-			Eval(GetCallActualArg(exp), env);
+		if (ExpType(GetCallActualArg(exp)) == CompoundExp){
+			result = NewIntegerValue(EvalCompound(GetCallActualArg(exp), env));
+			funcarg = GetFuncFormalArg(exp);
+			//temp = Eval(GetFuncBody(exp), env);
+		}
+		else{
+			result = Eval(GetCallActualArg(exp), env);
+			funcarg = GetFuncFormalArg(exp);
+			//temp = Eval(GetFuncBody(exp), env);
+		}
 		break;
 
 	case ConstExp:
@@ -43,7 +55,7 @@ valueADT Eval(expADT exp, environmentADT env){
 
 	case IdentifierExp:
 		printf(" %s ", ExpIdentifier(exp));
-		return NewIntegerValue(GetIdentifierValueE(ExpIdentifier(exp)));
+		return (GetIdentifierValue(environment, ExpIdentifier(exp)));
 		break;
 
 	case CompoundExp:
@@ -51,32 +63,11 @@ valueADT Eval(expADT exp, environmentADT env){
 		break;
 
 	default:
-		;
+		break;
 	}
 }
 
-void InitVariableTable(void)
-{
-    variableTable = NewSymbolTable();
-}
 
-int GetIdentifierValueE(string name)
-{
-    int *ip;
-
-    ip = Lookup(variableTable, name);
-    if (ip == UNDEFINED)  Error("%s is undefined", name);
-    return (*ip);
-}
-
-void SetIdentifierValue(string name, int value)
-{
-    int *ip;
-
-    ip = New(int *);
-    *ip = value;
-    Enter(variableTable, name, ip);
-}
 
 static int EvalCompound(expADT exp, environmentADT env)
 {
@@ -84,11 +75,11 @@ static int EvalCompound(expADT exp, environmentADT env)
     int lhs, rhs;
 
     op = ExpOperator(exp);
-    if (op == '=') {
+    /*if (op == '=') {
         rhs = GetIntValue(Eval(ExpRHS(exp), env));
-        SetIdentifierValue(ExpIdentifier(ExpLHS(exp)), rhs);
+        DefineValue(ExpIdentifier(ExpLHS(exp)), rhs);
         return (rhs);
-    }
+    }*/
     lhs = GetIntValue(Eval(ExpLHS(exp), env));
     rhs = GetIntValue(Eval(ExpRHS(exp), env));
     switch (op) {

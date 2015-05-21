@@ -21,10 +21,6 @@
 
 valueADT Eval(expADT exp, environmentADT env);
 
-void SetIdentifierValue(string name, int value);
 
-void InitVariableTable(void);
-
-int GetIdentifierValueE(string name);
 
 #endif

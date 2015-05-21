@@ -12,6 +12,9 @@
 #include "exp.h"
 #include "print.h"
 #include "eval.h"
+#include "parser.h"
+
+environmentADT environment;
 
 /* Main program */
 
@@ -39,16 +42,15 @@ void main(void){
 	expADT exp;
 	string line;
 	valueADT value;
-	environmentADT environ ;
+	
 
 	printf("Expression interpreter (type \"quit\" to exit)\n\n");
 
 	InitCommandTable();
-	InitVariableTable();
 	scanner = NewScanner();
 	SetScannerSpaceOption(scanner, IgnoreSpaces);
 
-	environ = NewEnvironment();
+	environment = NewEnvironment();
 
 
 
@@ -66,7 +68,7 @@ void main(void){
 				SetScannerString(scanner, line);
 				exp = ParseExp(scanner);
 				PrintExp(exp); printf("\n");
-				value = Eval(exp, environ); printf("\n");
+				value = Eval(exp, environment); printf("\n");
 				PrintValue(value);
 			}
 			except(ErrorException)

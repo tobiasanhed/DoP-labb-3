@@ -14,6 +14,10 @@
 #include "symtab.h"
 #include "scanadt.h"
 #include "eval.h"
+#include "value.h"
+#include "env.h"
+#include "parser.h"
+
 
 /*
 * Type: commandFnT
@@ -111,12 +115,27 @@ static void loadCmd(string cmd)
 
 static void defineValueCmd(scannerADT scanner)
 {
+	expADT body, newFunc;
 	string variable,
-		value;
+		value,
+		token;
+
 	variable = ReadToken(scanner);
+	token = ReadToken(scanner);
+	if(!StringEqual(token, "="))
+		Error("No valid definition.");
 	value = ReadToken(scanner);
 
-	SetIdentifierValue(variable, StringToInteger(value));
+	if(StringEqual(value, "func")){
+		SaveToken(scanner, value);
+		DefineIdentifier( environment, variable, NewFuncExp(variable,GetFuncBody(ParseExp(scanner))), NewClosure(environment));
+	}
+	else{
+		SaveToken(scanner, value);
+		body =  GetFuncBody(ParseExp(scanner));
+		newFunc = NewFuncExp("",body);
+		DefineIdentifier( environment, variable, newFunc, NewClosure(environment));
+	}
 	//printf("Command = define value %s\n", cmd);
 }
 
