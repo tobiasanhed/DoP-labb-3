@@ -37,17 +37,16 @@ valueADT Eval(expADT exp, environmentADT env){
 		break;
 
 	case CallExp:
-		
-		if (ExpType(GetCallActualArg(exp)) == CompoundExp){
-			result = NewIntegerValue(EvalCompound(GetCallActualArg(exp), env));
-		}
-		else{
 			newEnviron = NewClosure(env);
 
 			callexpress = GetCallExp(exp); //  f in f(E)
 			callarg = GetCallActualArg(exp);  // E in f(E)
 
-			if (ExpType(callarg) == CallExp){
+			if (ExpType(callarg) == CompoundExp){
+				value = Eval(callarg, env);
+				funcBody = NewFuncExp("", NewIntegerExp(GetIntValue(value)));
+			}
+			else if (ExpType(callarg) == CallExp){
 				value = Eval(callarg, env);
 				funcBody = NewFuncExp("", NewIntegerExp( GetIntValue(value)));
 			}
@@ -62,7 +61,7 @@ valueADT Eval(expADT exp, environmentADT env){
 			funcarg = GetFuncValueFormalArg(storedBody);  //argument of function when defined
 			DefineIdentifier(env, funcarg, funcBody, newEnviron); //define argument of function in body
 			return Eval(storedBody, env);
-		}
+		
 		break;
 
 	case ConstExp:
