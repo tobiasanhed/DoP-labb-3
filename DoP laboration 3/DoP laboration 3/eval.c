@@ -46,7 +46,8 @@ valueADT Eval(expADT exp, environmentADT env){
 		}
 		else{
 			newEnviron = NewClosure(env);
-			DefineIdentifier(newEnviron, GetFuncFormalArg(GetCallExp(exp)), GetCallActualArg(exp), newEnviron);
+			funcarg = GetFuncFormalArg(GetCallActualArg(exp));
+			DefineIdentifier(newEnviron, funcarg, GetCallActualArg(exp), newEnviron);
 			return Eval(GetFuncBody(exp), newEnviron);
 
 			//result = Eval(GetCallActualArg(exp), env);
