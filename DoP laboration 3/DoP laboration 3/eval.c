@@ -32,7 +32,7 @@ valueADT Eval(expADT exp, environmentADT env){
 
 	case IfExp:
 		//printf("IF-expression.\n");
-		if(controlExpression( GetIfRelOp(exp), GetIfLHSExpression(exp), GetIfRHSExpression(exp), env))
+		if(controlExpression( GetIfRelOp(exp), GetIfLHSExpression(exp), GetIfRHSExpression(exp), env)) //check to see if control exp is valid
 			Eval(GetIfThenPart(exp), env);
 		else
 			Eval(GetIfElsePart(exp), env);
