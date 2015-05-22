@@ -40,15 +40,22 @@ void loadFromFile(string fileName){
 	infile = fopen(fileName, "r");
 	if (infile == NULL) Error("Cant open %s", fileName);
 	line = ReadLine(infile);
-	while (line != EOF){
+	while (line != NULL){
 		if (line[0] != '#' && line[0] != '\0'){
 			line = Concat(":d ", line);
-			printf("%s\n", line);
+			i = StringLength(line);
+			if (line[i-1] == '{'){
+				line = Concat(line, ReadLine(infile));
+				while (line[i-1] != '}'){
+					i = StringLength(line);
+					line = Concat(line, ReadLine(infile));
+				}
+			}
+			printf("%s\n", line);			
 			ExecuteCommand(line);
 		}
 		line = ReadLine(infile);
 	}	
 
 	fclose(infile);
-	return;
 }
