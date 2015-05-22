@@ -30,18 +30,6 @@
 #include "symtab.h"
 #include "scanadt.h"
 
-/*
-void saveToFile(string fileName, environmentADT environment, int NBuckets){
-	 FILE *outfile;
-	 int i;
-
-	  outfile = fopen(fileName, "w");
-	 for (i = 0; i < NBuckets; i++){
-		 fprintf(outfile, "%s\n", environment->definitions->buckets[i].key);
-	 }
-	 
-	 fclose(outfile);
-}*/
 
 void loadFromFile(string fileName){
 	FILE *infile;
@@ -51,10 +39,14 @@ void loadFromFile(string fileName){
 
 	infile = fopen(fileName, "r");
 	if (infile == NULL) Error("Cant open %s", fileName);
-
-	for (i = 0; i < NBuckets; i++){
+	line = ReadLine(infile);
+	while (line != EOF){
+		if (line[0] != '#' && line[0] != '\0'){
+			line = Concat(":d ", line);
+			printf("%s\n", line);
+			ExecuteCommand(line);
+		}
 		line = ReadLine(infile);
-		ExecuteCommand(line);
 	}	
 
 	fclose(infile);
