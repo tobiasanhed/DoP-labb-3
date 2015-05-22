@@ -2,7 +2,7 @@
 #include "symtab.h"
 #include "env.h"
 
-#define MAXRECURSION 4000
+#define MAXRECURSION 400
 
 static int EvalCompound(expADT exp);
 static void senseRecursion();
@@ -55,7 +55,7 @@ valueADT Eval(expADT exp, environmentADT env){
 			else
 				funcBody= GetFuncBody(callarg);  //body of E in f(E)
 
-			funcname = ExpIdentifier(callexpress); // f
+			funcname = ExpIdentifier(GetFuncValueBody(callexpress)); // f
 
 			storedBody = (expADT)GetIdentifierValue(env, funcname); //recall body of function with name f
 

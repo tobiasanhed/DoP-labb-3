@@ -208,7 +208,8 @@ static expADT readF(scannerADT scanner){
 		exp = NewFuncExp("", NewIntegerExp(StringToInteger(token)));
 	}
 	else if (isalpha(token[0])){            //F ::= identifier  
-		exp = NewIdentifierExp(token);
+		exp = NewFuncExp("", NewIdentifierExp(token)); //test
+		//exp = NewIdentifierExp(token);
 	}
 	else {
 		Error("Illegal term or empty expression.\n");
