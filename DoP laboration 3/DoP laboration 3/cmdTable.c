@@ -137,6 +137,7 @@ static void defineValueCmd(scannerADT scanner)
 		parseBody = ParseExp(scanner);
 		//body =  GetFuncBody(parseBody);
 		newFunc = NewFuncExp("",parseBody);
+		//newFuncvalue = NewFuncValue(variable, newFunc, NewClosure(environment));
 		DefineIdentifier( environment, variable, newFunc, NewClosure(environment));
 	}
 	//printf("Command = define value %s\n", cmd);

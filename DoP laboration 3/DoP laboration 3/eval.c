@@ -23,11 +23,13 @@ valueADT Eval(expADT exp, environmentADT env){
 
 	senseRecursion();
 
+	newEnviron = NewClosure(environment);
+
 	switch (ExpType(exp)){
 
 	case FuncExp:
 		//GetIdentifierValueE();
-		return Eval(GetFuncBody(exp), env);//NewIntegerValue(EvalCompound(exp, env));//NewFuncValue(GetFuncFormalArg(exp), GetFuncBody(exp), env);
+		return Eval(GetFuncBody(exp), GetFuncValueClosure(exp));//env);//NewIntegerValue(EvalCompound(exp, env));//NewFuncValue(GetFuncFormalArg(exp), GetFuncBody(exp), env);
 		break;
 
 	case IfExp:
@@ -39,17 +41,17 @@ valueADT Eval(expADT exp, environmentADT env){
 		break;
 
 	case CallExp:
-			newEnviron = NewClosure(env);
+			
 
 			callexpress = GetCallExp(exp); //  f in f(E)
 			callarg = GetCallActualArg(exp);  // E in f(E)
 
 			if (ExpType(callarg) == CompoundExp){
-				value = Eval(callarg, env);
+				value = Eval(callarg, NewClosure(env));
 				funcBody = NewFuncExp("", NewIntegerExp(GetIntValue(value)));
 			}
 			else if (ExpType(callarg) == CallExp){
-				value = Eval(callarg, env);
+				value = Eval(callarg, NewClosure(env));
 				funcBody = NewFuncExp("", NewIntegerExp( GetIntValue(value)));
 			}
 			else
@@ -62,7 +64,7 @@ valueADT Eval(expADT exp, environmentADT env){
 			storedBody = GetFuncValueBody(storedBody); //peel off a layer
 			funcarg = GetFuncValueFormalArg(storedBody);  //argument of function when defined
 			DefineIdentifier(env, funcarg, funcBody, GetFuncValueClosure(storedBody)); //define argument of function in body
-			return Eval(storedBody, env);
+			return Eval(storedBody, NewClosure(env));
 		
 		break;
 
@@ -72,9 +74,9 @@ valueADT Eval(expADT exp, environmentADT env){
 
 	case IdentifierExp:
 		printf(" %s ", ExpIdentifier(exp));
-		value = GetIdentifierValue(environment, ExpIdentifier(exp));
+		value = GetIdentifierValue( newEnviron/*GetFuncValueClosure(value)*/, ExpIdentifier(exp));//environment, ExpIdentifier(exp));
 			
-		return Eval(GetFuncValueBody(value), env);
+		return Eval(GetFuncValueBody(value), GetFuncValueClosure(value)); //env);
 		break;
 
 	case CompoundExp:
