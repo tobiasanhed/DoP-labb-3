@@ -6,6 +6,7 @@
 
 static int EvalCompound(expADT exp);
 static void senseRecursion();
+static bool controlExpression(char relOp, expADT expL, expADT expR, environmentADT env);
 //static symtabADT variableTable;
 
 
@@ -31,14 +32,10 @@ valueADT Eval(expADT exp, environmentADT env){
 
 	case IfExp:
 		//printf("IF-expression.\n");
-		printf("if ");						// if expression not working at all
-		Eval(GetIfLHSExpression(exp), env);  // 3 i 3 < 4
-		printf(" %c ", GetIfRelOp(exp));     // <
-		Eval(GetIfRHSExpression(exp), env);  // 4
-		printf(" then ");
-		Eval(GetIfThenPart(exp), env);        //compoundexpr eller func
-		printf(" else ");
-		Eval(GetIfElsePart(exp), env);       //compoundexpr  eller func
+		if(controlExpression( GetIfRelOp(exp), GetIfLHSExpression(exp), GetIfRHSExpression(exp), env))
+			Eval(GetIfThenPart(exp), env);
+		else
+			Eval(GetIfElsePart(exp), env);
 		break;
 
 	case CallExp:
@@ -124,5 +121,35 @@ static void senseRecursion(){
 		countRecursion = 0;
 		Error("\n\nToo deep recursion... cannot continue calculation.\n");
 	}
+
+}
+
+static bool controlExpression(char relOp, expADT expL, expADT expR, environmentADT env){
+
+	valueADT leftV, rightV;
+
+	leftV = Eval(expL, env);
+	rightV = Eval(expR, env);
+
+	if(ValueType(leftV) == IntValue && ValueType(rightV) == IntValue ){
+
+		switch(relOp){
+
+		case '<':
+		return (GetIntValue(leftV) < GetIntValue(rightV));
+
+		case '>':
+			return (GetIntValue(leftV) > GetIntValue(rightV));
+
+		case '=':
+			return (GetIntValue(leftV) == GetIntValue(rightV));
+
+		default:
+			Error("Reloperator %c is not valid.\n", relOp);
+			break;
+		}
+	}
+	else
+		Error("\nCompared expressions is not Integers\n");
 
 }
