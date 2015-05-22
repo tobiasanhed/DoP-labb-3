@@ -56,6 +56,6 @@ void loadFromFile(string fileName){
 		}
 		line = ReadLine(infile);
 	}	
-
+	printf("%s loaded\n", fileName);
 	fclose(infile);
 }
