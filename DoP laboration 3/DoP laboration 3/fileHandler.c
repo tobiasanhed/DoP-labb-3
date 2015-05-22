@@ -51,7 +51,7 @@ void loadFromFile(string fileName){
 					line = Concat(line, ReadLine(infile));
 				}
 			}
-			printf("%s\n", line);			
+//			printf("%s\n", line);			
 			ExecuteCommand(line);
 		}
 		line = ReadLine(infile);
