@@ -17,6 +17,7 @@
 #include "value.h"
 #include "env.h"
 #include "parser.h"
+#include "fileHandler.h"
 
 
 /*
@@ -108,9 +109,9 @@ void ExecuteCommand(string cmd){
 
 /* Command dispatch functions */
 
-static void loadCmd(string cmd)
-{
-	printf("Command = load %s\n", cmd);
+static void loadCmd(scannerADT scanner){
+
+	loadFromFile(Concat(ReadToken(scanner), ".mfl"));
 }
 
 static void defineValueCmd(scannerADT scanner)

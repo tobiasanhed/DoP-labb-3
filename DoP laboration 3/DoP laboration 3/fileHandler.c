@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 /*
 * File: fileHandler.c
 * -----------
@@ -7,6 +9,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_DEPRICATE
 
+#define NBuckets 101
 
 #include <stdio.h>
 #include <ctype.h>
@@ -34,14 +37,13 @@ void saveToFile(string fileName, environmentADT environment, int NBuckets){
 	 int i;
 
 	 for (i = 0; i < NBuckets; i++){
-		// fprintf(outfile, "%s\n", environment->definitions->buckets[i].key);
+		 fprintf(outfile, "%s\n", environment->definitions->buckets[i].key);
 	 }
 	 
 	 fclose(outfile);
-}
-*/
+}*/
 
-void loadFromFile(string fileName, int NBuckets){
+void loadFromFile(string fileName){
 	FILE *infile;
 	string line;
 	int i;
