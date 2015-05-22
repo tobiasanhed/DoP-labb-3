@@ -4,6 +4,9 @@
 * Implementation av filhantering
 */
 
+#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_DEPRICATE
+
 
 #include <stdio.h>
 #include <ctype.h>
@@ -26,12 +29,11 @@
 
 void saveToFile(string fileName, environmentADT environment, int NBuckets){
 	 FILE *outfile;
-	 fopen(fileName, "w");
+	 outfile = fopen(fileName, "w");
 	 int i;
-	 int lol;
 
 	 for (i = 0; i < NBuckets; i++){
-		 fprintf(outfile, "%s\n", environment->definitions->buckets[i].key);
+		// fprintf(outfile, "%s\n", environment->definitions->buckets[i].key);
 	 }
 	 
 	 fclose(outfile);
@@ -43,7 +45,7 @@ void loadFromFile(string fileName, int NBuckets){
 	int i;
 	
 
-	fopen(fileName, "r");
+	infile = fopen(fileName, "r");
 	if (infile == NULL) Error("Cant open %s", fileName);
 
 	for (i = 0; i < NBuckets; i++){
