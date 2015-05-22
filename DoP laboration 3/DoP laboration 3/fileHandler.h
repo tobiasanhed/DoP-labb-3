@@ -1,7 +1,7 @@
 /*
 * File: fileHandler.h
 * -----------
-* Hanterar filer :)
+* Hanterar filer :) yo
 */
 
 
