@@ -27,6 +27,7 @@
 #include "symtab.h"
 #include "scanadt.h"
 
+/*
 void saveToFile(string fileName, environmentADT environment, int NBuckets){
 	 FILE *outfile;
 	 outfile = fopen(fileName, "w");
@@ -38,6 +39,7 @@ void saveToFile(string fileName, environmentADT environment, int NBuckets){
 	 
 	 fclose(outfile);
 }
+*/
 
 void loadFromFile(string fileName, int NBuckets){
 	FILE *infile;
