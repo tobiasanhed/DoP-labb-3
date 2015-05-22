@@ -2,7 +2,7 @@
 #include "symtab.h"
 #include "env.h"
 
-#define MAXRECURSION 400
+#define MAXRECURSION 4000
 
 static int EvalCompound(expADT exp);
 static void senseRecursion();
@@ -61,7 +61,7 @@ valueADT Eval(expADT exp, environmentADT env){
 
 			storedBody = GetFuncValueBody(storedBody); //peel off a layer
 			funcarg = GetFuncValueFormalArg(storedBody);  //argument of function when defined
-			DefineIdentifier(env, funcarg, funcBody, newEnviron); //define argument of function in body
+			DefineIdentifier(env, funcarg, funcBody, GetFuncValueClosure(storedBody)); //define argument of function in body
 			return Eval(storedBody, env);
 		
 		break;

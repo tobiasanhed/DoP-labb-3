@@ -33,9 +33,9 @@
 /*
 void saveToFile(string fileName, environmentADT environment, int NBuckets){
 	 FILE *outfile;
-	 outfile = fopen(fileName, "w");
 	 int i;
 
+	  outfile = fopen(fileName, "w");
 	 for (i = 0; i < NBuckets; i++){
 		 fprintf(outfile, "%s\n", environment->definitions->buckets[i].key);
 	 }

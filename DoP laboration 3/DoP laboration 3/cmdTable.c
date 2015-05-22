@@ -116,7 +116,7 @@ static void loadCmd(scannerADT scanner){
 
 static void defineValueCmd(scannerADT scanner)
 {
-	expADT body, newFunc;
+	expADT body, newFunc, parseBody;
 	string variable,
 		value,
 		token;
@@ -134,8 +134,9 @@ static void defineValueCmd(scannerADT scanner)
 	}
 	else{
 		SaveToken(scanner, value);
-		body =  GetFuncBody(ParseExp(scanner));
-		newFunc = NewFuncExp("",body);
+		parseBody = ParseExp(scanner);
+		//body =  GetFuncBody(parseBody);
+		newFunc = NewFuncExp("",parseBody);
 		DefineIdentifier( environment, variable, newFunc, NewClosure(environment));
 	}
 	//printf("Command = define value %s\n", cmd);
