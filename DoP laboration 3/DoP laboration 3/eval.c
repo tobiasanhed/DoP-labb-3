@@ -29,7 +29,7 @@ valueADT Eval(expADT exp, environmentADT env){
 
 	case FuncExp:
 		//GetIdentifierValueE();
-		return Eval(GetFuncBody(exp), GetFuncValueClosure(exp));//env);//NewIntegerValue(EvalCompound(exp, env));//NewFuncValue(GetFuncFormalArg(exp), GetFuncBody(exp), env);
+		return Eval(GetFuncBody(exp), NewClosure(env));//GetFuncValueClosure(exp));//env);//NewIntegerValue(EvalCompound(exp, env));//NewFuncValue(GetFuncFormalArg(exp), GetFuncBody(exp), env);
 		break;
 
 	case IfExp:
