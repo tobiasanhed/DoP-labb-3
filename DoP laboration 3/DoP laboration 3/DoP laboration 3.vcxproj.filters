@@ -45,6 +45,9 @@
     <ClCompile Include="print.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="fileHandler.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="env.h">
@@ -72,6 +75,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cmdTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fileHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
