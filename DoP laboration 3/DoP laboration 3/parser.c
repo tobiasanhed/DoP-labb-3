@@ -31,38 +31,9 @@ expADT ParseExp(scannerADT scanner){
 
 	if (MoreTokensExist(scanner))
 		Error("ParseExp: %s unexpected tokens left in scannner.\n", ReadToken(scanner));
-	
-	printf("%s\n", __FUNCTION__);
+
 	return exp;
 }
-
-/*
-static expADT equalSignE(scannerADT scanner){
-	//       
-	expADT exp = NULL;
-	string token;
-	char op;
-	expADT lhs, rhs;
-	                               //Def ::= identifier = E
-	exp = readE(scanner);			//identifier  
-
-
-	token = ReadToken(scanner);  // = 
-
-	if (StringEqual(token, "=")){
-		lhs = exp;
-		rhs = readE(scanner);    // E after =
-		op = token[0];
-		exp = NewCompoundExp(op, lhs, rhs);
-	}
-	else
-		SaveToken(scanner, token);  //  Not an expression with =
-
-	printf("%s\n", __FUNCTION__);
-	return exp;
-
-
-}*/
 
 /*
 * Function: readE
@@ -95,7 +66,6 @@ static expADT readE(scannerADT scanner){
 	else
 		SaveToken(scanner, token);  //  Not an expression with + or -
 
-	printf("%s\n", __FUNCTION__);
 	return exp;
 }
 
@@ -130,7 +100,6 @@ static expADT readT(scannerADT scanner){
 	else
 		SaveToken(scanner, token);  //  Not an expression with * or /
 
-	printf("%s\n", __FUNCTION__);
 	return exp;
 }
 
@@ -168,7 +137,6 @@ static expADT readC(scannerADT scanner){
 	else
 		SaveToken(scanner, token); //We have no call to function. Restore scanner.
 
-	printf("%s\n", __FUNCTION__);
 	return exp;
 }
 
@@ -191,7 +159,6 @@ static expADT readF(scannerADT scanner){
 	token = ReadToken(scanner);
 
 	if (StringEqual(token, "(")){     // F :: = (E)
-		//SaveToken(scanner, token);
 		exp = readE(scanner);
 
 		if (!StringEqual(ReadToken(scanner), ")"))
@@ -204,17 +171,14 @@ static expADT readF(scannerADT scanner){
 		exp = functionWithArgument(scanner);
 	}
 	else if (isdigit(token[0])){           //F ::= integer  
-		//exp = NewIntegerExp(StringToInteger(token));
-		exp = NewFuncExp("", NewIntegerExp(StringToInteger(token)));
+			exp = NewFuncExp("", NewIntegerExp(StringToInteger(token)));
 	}
 	else if (isalpha(token[0])){            //F ::= identifier  
 		exp = NewFuncExp("", NewIdentifierExp(token)); //test
-		//exp = NewIdentifierExp(token);
-	}
+		}
 	else {
 		Error("Illegal term or empty expression.\n");
 	}
-	printf("%s\n", __FUNCTION__);
 	return exp;
 }
 
@@ -245,8 +209,6 @@ static expADT ifClause(scannerADT scanner){
 				elsePart = readE(scanner);  // E after else
 				exp = NewIfExp(lhs, relOp, rhs, ifPart, elsePart);
 			}
-			//else
-				//Error("else is missing from if-expression.\n");
 		}
 		else
 			Error("then is missing from if-expression.\n");
@@ -254,7 +216,6 @@ static expADT ifClause(scannerADT scanner){
 	else {
 		Error("Relative token is not valid in if-expression.\n");
 	}
-	printf("%s\n", __FUNCTION__);
 	return exp;
 }
 
@@ -290,9 +251,7 @@ static expADT functionWithArgument(scannerADT scanner){
 		exp = NewFuncExp(arg, body);
 	else
 		Error("Function body end character not valid.\n");
-	printf("%s\n", __FUNCTION__);
 	return exp;
-
 }
 
 /*

@@ -30,7 +30,6 @@
 #include "symtab.h"
 #include "scanadt.h"
 
-
 void loadFromFile(string fileName){
 	FILE *infile;
 	string line;
@@ -50,8 +49,7 @@ void loadFromFile(string fileName){
 					i = StringLength(line);
 					line = Concat(line, ReadLine(infile));
 				}
-			}
-//			printf("%s\n", line);			
+			}		
 			ExecuteCommand(line);
 		}
 		line = ReadLine(infile);

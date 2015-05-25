@@ -129,18 +129,14 @@ static void defineValueCmd(scannerADT scanner)
 
 	if(StringEqual(value, "func")){
 		SaveToken(scanner, value);
-		//DefineIdentifier( environment, variable, NewFuncExp(variable,GetFuncBody(ParseExp(scanner))), NewClosure(environment));
 		DefineIdentifier(environment, variable, ParseExp(scanner), NewClosure(environment));
 	}
 	else{
 		SaveToken(scanner, value);
 		parseBody = ParseExp(scanner);
-		//body =  GetFuncBody(parseBody);
 		newFunc = NewFuncExp("",parseBody);
-		//newFuncvalue = NewFuncValue(variable, newFunc, NewClosure(environment));
-		DefineIdentifier( environment, variable, newFunc, NewClosure(environment));
+		DefineIdentifier(environment, variable, newFunc, NewClosure(environment));
 	}
-	//printf("Command = define value %s\n", cmd);
 }
 
 static void helpCmd(void)

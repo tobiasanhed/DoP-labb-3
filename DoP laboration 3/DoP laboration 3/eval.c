@@ -1,3 +1,9 @@
+/*
+* File: eval.c
+* ------------
+* This file implements the eval.h interface.
+*/
+
 #include "value.h"
 #include "symtab.h"
 #include "env.h"
@@ -28,12 +34,15 @@ valueADT Eval(expADT exp, environmentADT env){
 	switch (ExpType(exp)){
 
 	case FuncExp:
+<<<<<<< .mine
+		return Eval(GetFuncBody(exp), GetFuncValueClosure(exp));
+=======
 		//GetIdentifierValueE();
 		return Eval(GetFuncBody(exp), GetFuncValueClosure(exp));//GetFuncValueClosure(exp));//env);//NewIntegerValue(EvalCompound(exp, env));//NewFuncValue(GetFuncFormalArg(exp), GetFuncBody(exp), env);
+>>>>>>> .r44
 		break;
 
 	case IfExp:
-		//printf("IF-expression.\n");
 		if(controlExpression( GetIfRelOp(exp), GetIfLHSExpression(exp), GetIfRHSExpression(exp), env)) //check to see if control exp is valid
 			Eval(GetIfThenPart(exp), env);
 		else
@@ -75,9 +84,9 @@ valueADT Eval(expADT exp, environmentADT env){
 
 	case IdentifierExp:
 		printf(" %s ", ExpIdentifier(exp));
-		value = GetIdentifierValue( newEnviron/*GetFuncValueClosure(value)*/, ExpIdentifier(exp));//environment, ExpIdentifier(exp));
+		value = GetIdentifierValue( newEnviron, ExpIdentifier(exp));
 			
-		return Eval(GetFuncValueBody(value), GetFuncValueClosure(value)); //env);
+		return Eval(GetFuncValueBody(value), GetFuncValueClosure(value));
 		break;
 
 	case CompoundExp:
@@ -97,11 +106,7 @@ static int EvalCompound(expADT exp, environmentADT env)
     int lhs, rhs;
 
     op = ExpOperator(exp);
-    /*if (op == '=') {
-        rhs = GetIntValue(Eval(ExpRHS(exp), env));
-        DefineValue(ExpIdentifier(ExpLHS(exp)), rhs);
-        return (rhs);
-    }*/
+   
     lhs = GetIntValue(Eval(ExpLHS(exp), env));
     rhs = GetIntValue(Eval(ExpRHS(exp), env));
     switch (op) {
