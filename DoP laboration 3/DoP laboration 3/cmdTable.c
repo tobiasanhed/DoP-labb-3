@@ -141,7 +141,13 @@ static void defineValueCmd(scannerADT scanner)
 
 static void helpCmd(void)
 {
-	printf("Command = help\n");
+	printf(":d or :define to define a variable or function.\n");
+	printf(":d x = 42\n");
+	printf(":d pow = func (x) { x * x }\n");
+	printf(":h or :help for this menu of help\n");
+	printf(":l or :load to load a file\n");
+	printf(":l filename\n");
+	printf(":q or :quit to end this program\n");
 }
 
 static void quitCmd(void)

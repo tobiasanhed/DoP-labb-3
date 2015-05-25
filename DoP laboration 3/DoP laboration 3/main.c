@@ -35,7 +35,7 @@ void main(void){
 	string line;
 	valueADT value;
 	
-	printf("Expression interpreter (type \"quit\" to exit)\n\n");
+	printf("\n\n\nMFL Interpretator by S142066 Henrik Wistbacka, S142015 Tobias Anhed, S131469 Oscar Persson\n\n:h for help\n");
 
 	InitCommandTable();
 	scanner = NewScanner();

@@ -7,8 +7,6 @@
 static int EvalCompound(expADT exp);
 static void senseRecursion();
 static bool controlExpression(char relOp, expADT expL, expADT expR, environmentADT env);
-//static symtabADT variableTable;
-
 
 valueADT result,
 	temp;
@@ -28,12 +26,10 @@ valueADT Eval(expADT exp, environmentADT env){
 	switch (ExpType(exp)){
 
 	case FuncExp:
-		//GetIdentifierValueE();
-		return Eval(GetFuncBody(exp), env);//GetFuncValueClosure(exp));//GetFuncValueClosure(exp));//env);//NewIntegerValue(EvalCompound(exp, env));//NewFuncValue(GetFuncFormalArg(exp), GetFuncBody(exp), env);
+		return Eval(GetFuncBody(exp), env);
 		break;
 
 	case IfExp:
-		//printf("IF-expression.\n");
 		if(controlExpression( GetIfRelOp(exp), GetIfLHSExpression(exp), GetIfRHSExpression(exp), env)) //check to see if control exp is valid
 			Eval(GetIfThenPart(exp), env);
 		else
@@ -48,12 +44,11 @@ valueADT Eval(expADT exp, environmentADT env){
 
 			if (ExpType(callarg) == CompoundExp){
 				value = Eval(callarg, env);
-				return value;//funcBody = NewFuncExp("", NewIntegerExp(GetIntValue(value)));
+				return value;
 			}
 			else if (ExpType(callarg) == CallExp){
-				value = Eval(callarg, env);//GetFuncValueClosure(callarg));
+				value = Eval(callarg, env);
 				return value;
-				//funcBody = NewFuncExp("", NewIntegerExp( GetIntValue(value)));
 			}
 			else
 				funcBody= GetFuncBody(callarg);  //body of E in f(E)
@@ -75,9 +70,9 @@ valueADT Eval(expADT exp, environmentADT env){
 
 	case IdentifierExp:
 		printf(" %s ", ExpIdentifier(exp));
-		value = GetIdentifierValue( newEnviron/*GetFuncValueClosure(value)*/, ExpIdentifier(exp));//environment, ExpIdentifier(exp));
+		value = GetIdentifierValue( newEnviron, ExpIdentifier(exp));
 			
-		return Eval(GetFuncValueBody(value), GetFuncValueClosure(value));//Eval(GetFuncValueBody(value), GetFuncValueClosure(value)); //env);
+		return Eval(GetFuncValueBody(value), GetFuncValueClosure(value));
 		break;
 
 	case CompoundExp:
@@ -97,11 +92,7 @@ static int EvalCompound(expADT exp, environmentADT env)
     int lhs, rhs;
 
     op = ExpOperator(exp);
-    /*if (op == '=') {
-        rhs = GetIntValue(Eval(ExpRHS(exp), env));
-        DefineValue(ExpIdentifier(ExpLHS(exp)), rhs);
-        return (rhs);
-    }*/
+
     lhs = GetIntValue(Eval(ExpLHS(exp), env));
     rhs = GetIntValue(Eval(ExpRHS(exp), env));
     switch (op) {
