@@ -35,8 +35,6 @@ valueADT Eval(expADT exp, environmentADT env){
 
 	case FuncExp:
 		return Eval(GetFuncBody(exp), GetFuncValueClosure(exp));
-		//GetIdentifierValueE();
-		return Eval(GetFuncBody(exp), GetFuncValueClosure(exp));//GetFuncValueClosure(exp));//env);//NewIntegerValue(EvalCompound(exp, env));//NewFuncValue(GetFuncFormalArg(exp), GetFuncBody(exp), env);
 		break;
 
 	case IfExp:
@@ -54,12 +52,11 @@ valueADT Eval(expADT exp, environmentADT env){
 
 			if (ExpType(callarg) == CompoundExp){
 				value = Eval(callarg, env);
-				return value;//funcBody = NewFuncExp("", NewIntegerExp(GetIntValue(value)));
+				return value;
 			}
 			else if (ExpType(callarg) == CallExp){
 				value = Eval(callarg, GetFuncValueClosure(callarg));
 				return value;
-				//funcBody = NewFuncExp("", NewIntegerExp( GetIntValue(value)));
 			}
 			else
 				funcBody= GetFuncBody(callarg);  //body of E in f(E)
