@@ -29,7 +29,7 @@ valueADT Eval(expADT exp, environmentADT env){
 
 	case FuncExp:
 		//GetIdentifierValueE();
-		return Eval(GetFuncBody(exp), NewClosure(env));//GetFuncValueClosure(exp));//env);//NewIntegerValue(EvalCompound(exp, env));//NewFuncValue(GetFuncFormalArg(exp), GetFuncBody(exp), env);
+		return Eval(GetFuncBody(exp), GetFuncValueClosure(exp));//GetFuncValueClosure(exp));//env);//NewIntegerValue(EvalCompound(exp, env));//NewFuncValue(GetFuncFormalArg(exp), GetFuncBody(exp), env);
 		break;
 
 	case IfExp:
@@ -47,12 +47,13 @@ valueADT Eval(expADT exp, environmentADT env){
 			callarg = GetCallActualArg(exp);  // E in f(E)
 
 			if (ExpType(callarg) == CompoundExp){
-				value = Eval(callarg, NewClosure(env));
-				funcBody = NewFuncExp("", NewIntegerExp(GetIntValue(value)));
+				value = Eval(callarg, env);
+				return value;//funcBody = NewFuncExp("", NewIntegerExp(GetIntValue(value)));
 			}
 			else if (ExpType(callarg) == CallExp){
-				value = Eval(callarg, NewClosure(env));
-				funcBody = NewFuncExp("", NewIntegerExp( GetIntValue(value)));
+				value = Eval(callarg, GetFuncValueClosure(callarg));
+				return value;
+				//funcBody = NewFuncExp("", NewIntegerExp( GetIntValue(value)));
 			}
 			else
 				funcBody= GetFuncBody(callarg);  //body of E in f(E)
@@ -64,7 +65,7 @@ valueADT Eval(expADT exp, environmentADT env){
 			storedBody = GetFuncValueBody(storedBody); //peel off a layer
 			funcarg = GetFuncValueFormalArg(storedBody);  //argument of function when defined
 			DefineIdentifier(env, funcarg, funcBody, GetFuncValueClosure(storedBody)); //define argument of function in body
-			return Eval(storedBody, NewClosure(env));
+			return Eval(storedBody, GetFuncValueClosure(storedBody));
 		
 		break;
 
