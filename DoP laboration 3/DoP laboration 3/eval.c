@@ -34,12 +34,9 @@ valueADT Eval(expADT exp, environmentADT env){
 	switch (ExpType(exp)){
 
 	case FuncExp:
-<<<<<<< .mine
 		return Eval(GetFuncBody(exp), GetFuncValueClosure(exp));
-=======
 		//GetIdentifierValueE();
 		return Eval(GetFuncBody(exp), GetFuncValueClosure(exp));//GetFuncValueClosure(exp));//env);//NewIntegerValue(EvalCompound(exp, env));//NewFuncValue(GetFuncFormalArg(exp), GetFuncBody(exp), env);
->>>>>>> .r44
 		break;
 
 	case IfExp:
