@@ -6,4 +6,4 @@
 
 
 //Laddar in definitios från fil
-void loadFromFile(string fileName);
+void loadFromFile(string fileName, environmentADT environment);

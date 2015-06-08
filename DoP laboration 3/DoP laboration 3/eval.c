@@ -4,7 +4,7 @@
 
 #define MAXRECURSION 4000
 
-static int EvalCompound(expADT exp);
+static int EvalCompound(expADT exp, environmentADT env);
 static void senseRecursion();
 static bool controlExpression(char relOp, expADT expL, expADT expR, environmentADT env);
 
@@ -15,31 +15,54 @@ expADT myexp;
 valueADT Eval(expADT exp, environmentADT env){
 
 	string funcarg, funcname;
-	valueADT value, idexpress;
+	valueADT value, valueCallExpress, valueCallArg, valueBody;
 	environmentADT newEnviron;
-	expADT callexpress, callarg, storedBody, funcBody;
+	expADT callexpress;
 
 	senseRecursion();
 
-	newEnviron = NewClosure(environment);
+	//newEnviron = NewClosure(environment);
 
 	switch (ExpType(exp)){
 
 	case FuncExp:
-		return Eval(GetFuncBody(exp), env);
+		return NewFuncValue("", GetFuncBody(exp), NewClosure(env));
+		//return Eval(GetFuncBody(exp), env);
 		break;
 
 	case IfExp:
-		if(controlExpression( GetIfRelOp(exp), GetIfLHSExpression(exp), GetIfRHSExpression(exp), env)) //check to see if control exp is valid
+		if (controlExpression(GetIfRelOp(exp), GetIfLHSExpression(exp), GetIfRHSExpression(exp), NewClosure(env))) //check to see if control exp is valid
+			return Eval(GetIfThenPart(exp), NewClosure(env));
+		else
+			return Eval(GetIfElsePart(exp), NewClosure(env));
+		break;
+		/*if (controlExpression(GetIfRelOp(exp), GetIfLHSExpression(exp), GetIfRHSExpression(exp), env)) //check to see if control exp is valid
 			Eval(GetIfThenPart(exp), env);
 		else
 			Eval(GetIfElsePart(exp), env);
 		break;
-
+		*/
 	case CallExp:
-			
+		newEnviron = NewClosure(env);
+		callexpress = GetCallExp(exp);
+		valueCallExpress = Eval(callexpress, newEnviron);
+		valueCallArg = Eval(GetCallActualArg(exp), newEnviron); // argument for f
+		funcname = ExpIdentifier(GetFuncValueBody(valueCallExpress)); //f
+		
+		valueBody = GetIdentifierValue(GetFuncValueClosure(valueCallExpress), funcname); //recall body of function with name f
+		funcarg = GetFuncFormalArg(GetFuncValueBody(valueBody));
+		
+		if (ValueType(valueCallArg) == IntValue)
+			DefineIdentifier(env, funcarg, NewFuncExp("", NewIntegerExp(GetIntValue(valueCallArg))), newEnviron); //define argument of function in body
+		else
+			DefineIdentifier(env, funcarg, GetFuncValueBody(valueCallArg), GetFuncValueClosure(valueCallArg)); //define argument of function in body
 
-			callexpress = GetCallExp(exp); //  f in f(E)
+		valueCallExpress = Eval(GetFuncValueBody(valueBody), GetFuncValueClosure(valueBody));
+		return Eval(GetFuncValueBody(valueCallExpress), GetFuncValueClosure(valueCallExpress));
+		//funcarg = GetFuncValueFormalArg(Eval(GetFuncValueBody(valueBody), GetFuncValueClosure(valueBody)));  //argument of function when defined
+		
+		//return Eval(GetFuncValueBody(valueCallExpress), GetFuncValueClosure(valueCallExpress));
+			/*callexpress = GetCallExp(exp); //  f in f(E)
 			callarg = GetCallActualArg(exp);  // E in f(E)
 
 			if (ExpType(callarg) == CompoundExp){
@@ -61,7 +84,7 @@ valueADT Eval(expADT exp, environmentADT env){
 			funcarg = GetFuncValueFormalArg(storedBody);  //argument of function when defined
 			DefineIdentifier(env, funcarg, funcBody, GetFuncValueClosure(storedBody)); //define argument of function in body
 			return Eval(storedBody, GetFuncValueClosure(storedBody));
-		
+			*/
 		break;
 
 	case ConstExp:
@@ -70,9 +93,10 @@ valueADT Eval(expADT exp, environmentADT env){
 
 	case IdentifierExp:
 		printf(" %s ", ExpIdentifier(exp));
-		value = GetIdentifierValue( newEnviron, ExpIdentifier(exp));
-			
-		return Eval(GetFuncValueBody(value), GetFuncValueClosure(value));
+		//value = GetIdentifierValue( newEnviron, ExpIdentifier(exp));
+		value = GetIdentifierValue(env, ExpIdentifier(exp));
+	    return value;
+		//return Eval(GetFuncValueBody(value), GetFuncValueClosure(value));
 		break;
 
 	case CompoundExp:
@@ -86,15 +110,41 @@ valueADT Eval(expADT exp, environmentADT env){
 
 
 
-static int EvalCompound(expADT exp, environmentADT env)
-{
+static int EvalCompound(expADT exp, environmentADT env){
     char op;
     int lhs, rhs;
+	valueADT lValue, rValue;
 
     op = ExpOperator(exp);
 
-    lhs = GetIntValue(Eval(ExpLHS(exp), env));
-    rhs = GetIntValue(Eval(ExpRHS(exp), env));
+	//lhs = GetIntValue(Eval(ExpLHS(exp), env));
+	//rhs = GetIntValue(Eval(ExpRHS(exp), env));
+	lValue = Eval(ExpLHS(exp), env);
+    rValue = Eval(ExpRHS(exp), env);
+
+	while (ValueType(lValue) == FuncValue)
+		lValue = Eval(GetFuncValueBody(lValue), GetFuncValueClosure(lValue));
+	
+	lhs = GetIntValue(lValue);
+
+	while (ValueType(rValue) == FuncValue)
+		rValue = Eval(GetFuncValueBody(rValue), GetFuncValueClosure(rValue));
+		
+	rhs = GetIntValue(rValue);
+		
+
+	/*if (ValueType(lValue) == IntValue)
+		lhs = GetIntValue(lValue);
+	else
+		Eval(GetFuncValueBody(lValue), GetFuncValueClosure(lValue));
+
+	if (ValueType(rValue) == IntValue)
+		rhs = GetIntValue(rValue);
+	else
+		Eval(GetFuncValueBody(rValue), GetFuncValueClosure(rValue));
+		*/
+	//lhs = GetIntValue(lfuncValue);
+	//rhs = GetIntValue(rfuncValue);
     switch (op) {
       case '+': return (lhs + rhs);
       case '-': return (lhs - rhs);
@@ -124,6 +174,12 @@ static bool controlExpression(char relOp, expADT expL, expADT expR, environmentA
 
 	leftV = Eval(expL, env);
 	rightV = Eval(expR, env);
+
+	while (ValueType(leftV) == FuncValue)
+		leftV = Eval(GetFuncValueBody(leftV), GetFuncValueClosure(leftV));
+
+	while (ValueType(rightV) == FuncValue)
+		rightV = Eval(GetFuncValueBody(rightV), GetFuncValueClosure(rightV));
 
 	if(ValueType(leftV) == IntValue && ValueType(rightV) == IntValue ){
 

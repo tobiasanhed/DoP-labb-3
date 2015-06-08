@@ -22,8 +22,6 @@
 #include "parser.h"
 #include "fileHandler.h"
 
-environmentADT environment;
-
 /* Main program */
 
 
@@ -34,6 +32,8 @@ void main(void){
 	expADT exp;
 	string line;
 	valueADT value;
+
+	environmentADT environment;
 	
 	printf("\n\n\nMFL Interpretator by S142066 Henrik Wistbacka, S142015 Tobias Anhed, S131469 Oscar Persson\n\n:h for help\n");
 
@@ -53,7 +53,7 @@ void main(void){
 				exit(0);
 			}
 			if (StringEqual(":", CharToString(line[0])))
-				ExecuteCommand(line);
+				ExecuteCommand(line, environment);
 			else{
 				SetScannerString(scanner, line);
 				exp = ParseExp(scanner);

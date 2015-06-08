@@ -170,8 +170,9 @@ static expADT readF(scannerADT scanner){
 	else if (StringEqual(token, "func")){  //F ::= func (identifier) { E } // Function with argument
 		exp = functionWithArgument(scanner);
 	}
-	else if (isdigit(token[0])){           //F ::= integer  
-			exp = NewFuncExp("", NewIntegerExp(StringToInteger(token)));
+	else if (isdigit(token[0])){           //F ::= integer
+		//exp = NewIntegerExp(StringToInteger(token));
+		exp = NewFuncExp("", NewIntegerExp(StringToInteger(token)));
 	}
 	else if (isalpha(token[0])){            //F ::= identifier  
 		exp = NewFuncExp("", NewIdentifierExp(token)); //test
@@ -231,7 +232,6 @@ static expADT ifClause(scannerADT scanner){
 static expADT functionWithArgument(scannerADT scanner){
 
 	expADT exp = NULL;
-	string token;
 
 	string arg = NULL;
 	expADT body = NULL;

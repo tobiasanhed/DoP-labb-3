@@ -53,7 +53,7 @@ void PrintExp(expADT exp){
 		break;
 
 	default:
-		Error;
+		Error("Expression could not be printed - unknown type\n");
 	}
 }
 

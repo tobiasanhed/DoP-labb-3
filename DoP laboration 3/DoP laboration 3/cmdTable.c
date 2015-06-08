@@ -18,6 +18,13 @@
 #include "env.h"
 #include "parser.h"
 #include "fileHandler.h"
+#include "cmdTable.h"
+
+typedef enum{
+	noArg,
+	oneArg,
+	twoArg
+}countArgsT;
 
 
 /*
@@ -28,6 +35,10 @@
 
 typedef void(*commandFnT)(void);
 
+typedef void (*command2argsFnT)(scannerADT , environmentADT);
+
+typedef void(*command1argsFnT)(scannerADT);
+
 /*
 * Type: commandEntryT
 * -------------------
@@ -37,7 +48,11 @@ typedef void(*commandFnT)(void);
 */
 
 typedef struct {
-	commandFnT fn;
+	union {
+		commandFnT fn;
+		command1argsFnT fn1;
+		command2argsFnT fn2;
+	}fnTypeT;
 } *commandEntryT;
 
 /*
@@ -51,9 +66,9 @@ static symtabADT commandTable;
 
 /* Local function declarations */
 
-static void defineCommand(string cmd, commandFnT fn);
-static void loadCmd(scannerADT scanner);
-static void defineValueCmd(scannerADT scanner);
+static void defineCommand(string cmd, void *fn, countArgsT type);
+static void loadCmd(scannerADT scanner, environmentADT environment);
+static void defineValueCmd(scannerADT scanner, environmentADT environment);
 static void helpCmd(void);
 static void quitCmd(void);
 
@@ -62,26 +77,42 @@ static void quitCmd(void);
 void InitCommandTable(void)
 {
 	commandTable = NewSymbolTable();
-	defineCommand(":load", loadCmd);
-	defineCommand(":l", loadCmd);
-	defineCommand(":define", defineValueCmd);
-	defineCommand(":d", defineValueCmd);
-	defineCommand(":help", helpCmd);
-	defineCommand(":h", helpCmd);
-	defineCommand(":quit", quitCmd);
-	defineCommand(":q", quitCmd);
+	defineCommand(":load", loadCmd, twoArg);
+	defineCommand(":l", loadCmd, twoArg);
+	defineCommand(":define", defineValueCmd, twoArg);
+	defineCommand(":d", defineValueCmd, twoArg);
+	defineCommand(":help", helpCmd, noArg);
+	defineCommand(":h", helpCmd, noArg);
+	defineCommand(":quit", quitCmd, noArg);
+	defineCommand(":q", quitCmd, noArg);
 }
 
-static void defineCommand(string cmd, commandFnT fn)
+static void defineCommand(string cmd, void *fn, countArgsT type)
 {
 	commandEntryT entry;
 
 	entry = New(commandEntryT);
-	entry->fn = fn;
+
+	switch (type){
+
+	case noArg:
+		entry->fnTypeT.fn = (commandFnT)fn;
+		break;
+	case oneArg:
+		entry->fnTypeT.fn1 = (command1argsFnT)fn;
+		break;
+	case twoArg:
+		entry->fnTypeT.fn2 = (command2argsFnT)fn;
+		break;
+	default:
+		Error("defineCommand with invalid parameters\n");
+		break;
+	}
+
 	Enter(commandTable, cmd, entry);
 }
 
-void ExecuteCommand(string cmd){
+void ExecuteCommand(string cmd, environmentADT env){
 	
 	commandEntryT entry;
 	scannerADT scanner;
@@ -99,24 +130,26 @@ void ExecuteCommand(string cmd){
 		printf("Undefined command: %s\n", cmd);
 		return;
 	}
-	if (StringEqual(token, ":l") || StringEqual(token, ":load") || StringEqual(token, ":d") || StringEqual(token, ":define"))
-		entry->fn(scanner);
+	if (StringEqual(token, ":l") || StringEqual(token, ":load"))
+		entry->fnTypeT.fn1(scanner);
+	else if (StringEqual(token, ":d") || StringEqual(token, ":define"))
+		entry->fnTypeT.fn2(scanner, env);
 	else
-		entry->fn();
+		entry->fnTypeT.fn();
 
 	FreeScanner(scanner);
 }
 
 /* Command dispatch functions */
 
-static void loadCmd(scannerADT scanner){
+static void loadCmd(scannerADT scanner, environmentADT environment ){
 
-	loadFromFile(Concat(ReadToken(scanner), ".mfl"));
+	loadFromFile(Concat(ReadToken(scanner), ".mfl"), environment);
 }
 
-static void defineValueCmd(scannerADT scanner)
+static void defineValueCmd(scannerADT scanner, environmentADT environment)
 {
-	expADT body, newFunc, parseBody;
+	expADT  newFunc, parseBody;
 	string variable,
 		value,
 		token;

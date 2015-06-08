@@ -7,7 +7,9 @@
 #ifndef _cmdTable_h
 #define _cmdTable_h
 
-void ExecuteCommand(string cmd);
+#include "env.h"
+
+void ExecuteCommand(string cmd, environmentADT env);
 void InitCommandTable(void);
 
 #endif
