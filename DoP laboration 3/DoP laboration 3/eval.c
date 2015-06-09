@@ -149,7 +149,7 @@ static int EvalCompound(expADT exp, environmentADT env){
       case '+': return (lhs + rhs);
       case '-': return (lhs - rhs);
       case '*': return (lhs * rhs);
-      case '/': return (lhs / rhs);
+	  case '/': if (rhs == 0) Error("Division by zero\n"); else return (lhs / rhs);
       default:  Error("Illegal operator");
     }
 }
