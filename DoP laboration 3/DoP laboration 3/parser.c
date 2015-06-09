@@ -171,8 +171,8 @@ static expADT readF(scannerADT scanner){
 		exp = functionWithArgument(scanner);
 	}
 	else if (isdigit(token[0])){           //F ::= integer
-		//exp = NewIntegerExp(StringToInteger(token));
-		exp = NewFuncExp("", NewIntegerExp(StringToInteger(token)));
+		exp = NewIntegerExp(StringToInteger(token));
+		//exp = NewFuncExp("", NewIntegerExp(StringToInteger(token)));
 	}
 	else if (isalpha(token[0])){            //F ::= identifier  
 		exp = NewFuncExp("", NewIdentifierExp(token)); //test

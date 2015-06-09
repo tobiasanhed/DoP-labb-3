@@ -58,7 +58,7 @@ void main(void){
 				SetScannerString(scanner, line);
 				exp = ParseExp(scanner);
 				PrintExp(exp); printf("\n");
-				value = Eval(exp, environment); printf("\n");
+				value = Eval(exp, NewClosure(environment)); printf("\n");
 				PrintValue(value);
 			}
 			except(ErrorException)

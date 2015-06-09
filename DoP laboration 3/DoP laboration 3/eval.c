@@ -57,8 +57,8 @@ valueADT Eval(expADT exp, environmentADT env){
 		else
 			DefineIdentifier(env, funcarg, GetFuncValueBody(valueCallArg), newEnviron);//GetFuncValueClosure(valueCallArg)); //define argument of function in body
 
-		valueCallExpress = Eval(GetFuncValueBody(valueBody), GetFuncValueClosure(valueBody));
-		return Eval(GetFuncValueBody(valueCallExpress), GetFuncValueClosure(valueCallExpress));
+		valueCallExpress = Eval(GetFuncValueBody(valueBody), newEnviron);//GetFuncValueClosure(valueBody));
+		return Eval(GetFuncValueBody(valueCallExpress), GetFuncValueClosure(valueCallExpress));//GetFuncValueClosure(valueCallExpress));
 		//funcarg = GetFuncValueFormalArg(Eval(GetFuncValueBody(valueBody), GetFuncValueClosure(valueBody)));  //argument of function when defined
 		
 		//return Eval(GetFuncValueBody(valueCallExpress), GetFuncValueClosure(valueCallExpress));
