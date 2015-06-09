@@ -1,11 +1,9 @@
 #include "value.h"
 #include "symtab.h"
 #include "env.h"
-
-#define MAXRECURSION 4000
+#include "eval.h"
 
 static int EvalCompound(expADT exp, environmentADT env);
-static void senseRecursion();
 static bool controlExpression(char relOp, expADT expL, expADT expR, environmentADT env);
 
 valueADT result,
@@ -19,7 +17,7 @@ valueADT Eval(expADT exp, environmentADT env){
 	environmentADT newEnviron;
 	expADT callexpress;
 
-	senseRecursion();
+	senseRecursion(FALSE);
 
 	//newEnviron = NewClosure(environment);
 
@@ -155,11 +153,14 @@ static int EvalCompound(expADT exp, environmentADT env){
 }
 
 
-static void senseRecursion(){
+void senseRecursion(bool resetCounter){
 
 	static int countRecursion = 0;
 
 	countRecursion++;
+
+	if (resetCounter == TRUE)
+		countRecursion = 0;
 
 	if (countRecursion > MAXRECURSION){
 		countRecursion = 0;

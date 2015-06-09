@@ -64,5 +64,6 @@ void main(void){
 			except(ErrorException)
 				printf("Error: %s\n", (string)GetExceptionValue());
 		} endtry
+			senseRecursion(TRUE);
 	}
 }

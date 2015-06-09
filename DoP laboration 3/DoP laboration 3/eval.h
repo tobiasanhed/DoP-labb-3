@@ -21,6 +21,8 @@
 
 valueADT Eval(expADT exp, environmentADT env);
 
+#define MAXRECURSION 4000
 
+void senseRecursion(bool resetCounter);
 
 #endif
