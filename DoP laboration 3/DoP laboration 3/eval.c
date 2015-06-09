@@ -45,8 +45,8 @@ valueADT Eval(expADT exp, environmentADT env){
 	case CallExp:
 		newEnviron = NewClosure(env);
 		callexpress = GetCallExp(exp);
-		valueCallExpress = Eval(callexpress, newEnviron);
-		valueCallArg = Eval(GetCallActualArg(exp), newEnviron); // argument for f
+		valueCallExpress = Eval(callexpress, env);
+		valueCallArg = Eval(GetCallActualArg(exp), env); // argument for f
 		funcname = ExpIdentifier(GetFuncValueBody(valueCallExpress)); //f
 		
 		valueBody = GetIdentifierValue(GetFuncValueClosure(valueCallExpress), funcname); //recall body of function with name f
@@ -55,7 +55,7 @@ valueADT Eval(expADT exp, environmentADT env){
 		if (ValueType(valueCallArg) == IntValue)
 			DefineIdentifier(env, funcarg, NewFuncExp("", NewIntegerExp(GetIntValue(valueCallArg))), newEnviron); //define argument of function in body
 		else
-			DefineIdentifier(env, funcarg, GetFuncValueBody(valueCallArg), GetFuncValueClosure(valueCallArg)); //define argument of function in body
+			DefineIdentifier(env, funcarg, GetFuncValueBody(valueCallArg), newEnviron);//GetFuncValueClosure(valueCallArg)); //define argument of function in body
 
 		valueCallExpress = Eval(GetFuncValueBody(valueBody), GetFuncValueClosure(valueBody));
 		return Eval(GetFuncValueBody(valueCallExpress), GetFuncValueClosure(valueCallExpress));
@@ -95,8 +95,8 @@ valueADT Eval(expADT exp, environmentADT env){
 		printf(" %s ", ExpIdentifier(exp));
 		//value = GetIdentifierValue( newEnviron, ExpIdentifier(exp));
 		value = GetIdentifierValue(env, ExpIdentifier(exp));
-	    return value;
-		//return Eval(GetFuncValueBody(value), GetFuncValueClosure(value));
+	    //return value;
+		return Eval(GetFuncValueBody(value), GetFuncValueClosure(value));
 		break;
 
 	case CompoundExp:

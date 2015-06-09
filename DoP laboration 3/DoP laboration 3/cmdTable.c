@@ -131,7 +131,7 @@ void ExecuteCommand(string cmd, environmentADT env){
 		return;
 	}
 	if (StringEqual(token, ":l") || StringEqual(token, ":load"))
-		entry->fnTypeT.fn1(scanner);
+		entry->fnTypeT.fn2(scanner, env);
 	else if (StringEqual(token, ":d") || StringEqual(token, ":define"))
 		entry->fnTypeT.fn2(scanner, env);
 	else
