@@ -43,8 +43,16 @@ valueADT Eval(expADT exp, environmentADT env){
 	case CallExp:
 		newEnviron = NewClosure(env);
 		callexpress = GetCallExp(exp);
-		valueCallExpress = Eval(callexpress, env);
+
 		valueCallArg = Eval(GetCallActualArg(exp), env); // argument for f
+		valueCallExpress = Eval(callexpress, env);
+
+		if (ExpType(GetFuncValueBody(valueCallExpress)) == CompoundExp){
+			value = Eval(GetFuncValueBody(valueCallExpress), GetFuncValueClosure(valueCallExpress));
+			return value;
+		}
+
+		
 		funcname = ExpIdentifier(GetFuncValueBody(valueCallExpress)); //f
 		
 		valueBody = GetIdentifierValue(GetFuncValueClosure(valueCallExpress), funcname); //recall body of function with name f
