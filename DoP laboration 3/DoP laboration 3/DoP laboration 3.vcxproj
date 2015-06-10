@@ -83,7 +83,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v100</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -99,8 +99,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>\\utbfs3\UTBVOL6\home\S142066\Desktop\PClibs\include;C:\Users\gast\Desktop\PCLIBS\include;$(SolutionDir)\Bibliotek;$(IncludePath)</IncludePath>
-    <LibraryPath>\\utbfs3\UTBVOL6\home\S142066\Desktop\PClibs\lib;C:\Users\gast\Desktop\PCLIBS\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>F:\dokument\P-tek\Roberts;\\utbfs3\UTBVOL6\home\S142066\Desktop\PClibs\include;C:\Users\gast\Desktop\PCLIBS\include;$(SolutionDir)\Bibliotek;$(IncludePath)</IncludePath>
+    <LibraryPath>F:\dokument\P-tek\Roberts;$(SolutionDir)\Bibliotek;\\utbfs3\UTBVOL6\home\S142066\Desktop\PClibs\lib;C:\Users\gast\Desktop\PCLIBS\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
