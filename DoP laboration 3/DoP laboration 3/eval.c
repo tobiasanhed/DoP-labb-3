@@ -15,7 +15,7 @@ valueADT Eval(expADT exp, environmentADT env){
 	string funcarg, funcname;
 	valueADT value, valueCallExpress, valueCallArg, valueBody;
 	environmentADT newEnviron;
-	expADT callexpress;
+	expADT callexpress, ifCallExp;
 
 	senseRecursion(FALSE);
 
@@ -35,9 +35,9 @@ valueADT Eval(expADT exp, environmentADT env){
 			return Eval(GetIfElsePart(exp), NewClosure(env));
 		break;
 		/*if (controlExpression(GetIfRelOp(exp), GetIfLHSExpression(exp), GetIfRHSExpression(exp), env)) //check to see if control exp is valid
-			Eval(GetIfThenPart(exp), env);
+			return Eval(GetIfThenPart(exp), env);
 		else
-			Eval(GetIfElsePart(exp), env);
+			return Eval(GetIfElsePart(exp), env);
 		break;
 		*/
 	case CallExp:
@@ -50,12 +50,30 @@ valueADT Eval(expADT exp, environmentADT env){
 		valueBody = GetIdentifierValue(GetFuncValueClosure(valueCallExpress), funcname); //recall body of function with name f
 		funcarg = GetFuncFormalArg(GetFuncValueBody(valueBody));
 		
-		if (ValueType(valueCallArg) == IntValue)
-			DefineIdentifier(env, funcarg, NewFuncExp("", NewIntegerExp(GetIntValue(valueCallArg))), newEnviron); //define argument of function in body
-		else
-			DefineIdentifier(env, funcarg, GetFuncValueBody(valueCallArg), newEnviron);//GetFuncValueClosure(valueCallArg)); //define argument of function in body
+		if (1){//ValueType(valueCallArg) == IntValue){
 
-		valueCallExpress = Eval(GetFuncValueBody(valueBody), newEnviron);//GetFuncValueClosure(valueBody));
+			while(ValueType(valueCallArg) != IntValue)
+				valueCallArg = Eval(GetFuncValueBody(valueCallArg), newEnviron);
+
+			DefineIdentifier(env, funcarg, NewFuncExp("", NewIntegerExp(GetIntValue(valueCallArg))), newEnviron);
+			printf("%s: %d\n", __FUNCTION__, GetIntValue(valueCallArg));
+			valueCallExpress = Eval(GetFuncValueBody(valueBody), newEnviron);
+			//Eval(GetFuncValueBody(valueCallExpress), GetFuncValueClosure(valueCallExpress));
+			
+			if(ExpType(ifCallExp = GetFuncValueBody(valueCallExpress)) == IfExp){
+				if (controlExpression(GetIfRelOp(ifCallExp), GetIfLHSExpression(ifCallExp), GetIfRHSExpression(ifCallExp), newEnviron)){
+					value = Eval(GetIfThenPart(ifCallExp), newEnviron);
+					DefineIdentifier(env, funcarg, GetFuncValueBody(value), newEnviron);
+					return value;
+				}
+			}
+		}
+		else{
+			DefineIdentifier(env, funcarg, GetFuncValueBody(valueCallArg), newEnviron);//GetFuncValueClosure(valueCallArg)); //define argument of function in body
+			valueCallExpress = Eval(GetFuncValueBody(valueBody), newEnviron);//GetFuncValueClosure(valueBody));
+		}
+
+		
 		return Eval(GetFuncValueBody(valueCallExpress), GetFuncValueClosure(valueCallExpress));//GetFuncValueClosure(valueCallExpress));
 		//funcarg = GetFuncValueFormalArg(Eval(GetFuncValueBody(valueBody), GetFuncValueClosure(valueBody)));  //argument of function when defined
 		
