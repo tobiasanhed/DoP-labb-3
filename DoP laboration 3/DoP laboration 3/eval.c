@@ -52,18 +52,21 @@ valueADT Eval(expADT exp, environmentADT env){
 			return value;
 		}
 
-		
-		funcname = ExpIdentifier(GetFuncValueBody(valueCallExpress)); //f
-		
-		valueBody = GetIdentifierValue(GetFuncValueClosure(valueCallExpress), funcname); //recall body of function with name f
-		funcarg = GetFuncFormalArg(GetFuncValueBody(valueBody));
-		
-		if (ValueType(valueCallArg) == IntValue)
-			DefineIdentifier(env, funcarg, NewFuncExp("", NewIntegerExp(GetIntValue(valueCallArg))), newEnviron); //define argument of function in body
-		else
-			DefineIdentifier(env, funcarg, GetFuncValueBody(valueCallArg), newEnviron);//GetFuncValueClosure(valueCallArg)); //define argument of function in body
+		if (ExpType(GetFuncValueBody(valueCallExpress)) == IdentifierExp){
+			funcname = ExpIdentifier(GetFuncValueBody(valueCallExpress)); //f
 
-		valueCallExpress = Eval(GetFuncValueBody(valueBody), newEnviron);//GetFuncValueClosure(valueBody));
+			valueBody = GetIdentifierValue(GetFuncValueClosure(valueCallExpress), funcname); //recall body of function with name f
+			funcarg = GetFuncFormalArg(GetFuncValueBody(valueBody));
+
+			if (ValueType(valueCallArg) == IntValue)
+				DefineIdentifier(env, funcarg, NewFuncExp("", NewIntegerExp(GetIntValue(valueCallArg))), newEnviron); //define argument of function in body
+			else
+				DefineIdentifier(env, funcarg, GetFuncValueBody(valueCallArg), newEnviron);//GetFuncValueClosure(valueCallArg)); //define argument of function in body
+			
+			valueCallExpress = Eval(GetFuncValueBody(valueBody), newEnviron);//GetFuncValueClosure(valueBody));
+		}
+
+		
 		return Eval(GetFuncValueBody(valueCallExpress), GetFuncValueClosure(valueCallExpress));//GetFuncValueClosure(valueCallExpress));
 		//funcarg = GetFuncValueFormalArg(Eval(GetFuncValueBody(valueBody), GetFuncValueClosure(valueBody)));  //argument of function when defined
 		
