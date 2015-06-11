@@ -7,6 +7,7 @@
 
 #include "value.h"
 #include "exp.h"
+#include "eval.h"
 
 void PrintExp(expADT exp){
 	
@@ -62,7 +63,12 @@ void PrintValue(valueADT value){
 	if (ValueType(value) == IntValue)
 		printf("Int value: %d\n", GetIntValue(value));
 	else{
-		printf("%s\n", GetFuncValueFormalArg(value));
+		
+		while (ValueType(value) == FuncValue)
+			value = Eval(GetFuncValueBody(value), NewClosure(GetFuncValueClosure(value)));
+
+		printf("Int value: %d\n", GetIntValue(value));
+		//printf("%s\n", GetFuncValueFormalArg(value));
 	}
 }
 
