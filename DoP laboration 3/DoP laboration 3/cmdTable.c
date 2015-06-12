@@ -167,8 +167,8 @@ static void defineValueCmd(scannerADT scanner, environmentADT environment)
 	else{
 		SaveToken(scanner, value);
 		parseBody = ParseExp(scanner);
-		newFunc = NewFuncExp("",parseBody);
-		DefineIdentifier(environment, variable, newFunc, NewClosure(environment));
+		// Behöver inte göra en ny func här heller..
+		DefineIdentifier(environment, variable, parseBody, NewClosure(environment));
 	}
 }
 

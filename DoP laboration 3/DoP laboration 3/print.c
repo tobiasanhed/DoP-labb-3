@@ -63,12 +63,7 @@ void PrintValue(valueADT value){
 	if (ValueType(value) == IntValue)
 		printf("Int value: %d\n", GetIntValue(value));
 	else{
-		
-		while (ValueType(value) == FuncValue)
-			value = Eval(GetFuncValueBody(value), NewClosure(GetFuncValueClosure(value)));
-
-		printf("Int value: %d\n", GetIntValue(value));
-		//printf("%s\n", GetFuncValueFormalArg(value));
+		printf("Function with one argument\n");
 	}
 }
 

@@ -19,13 +19,11 @@ valueADT Eval(expADT exp, environmentADT env){
 
 	senseRecursion(FALSE);
 
-	//newEnviron = NewClosure(environment);
 
 	switch (ExpType(exp)){
 
 	case FuncExp:
-		return NewFuncValue("", GetFuncBody(exp), NewClosure(env));
-		//return Eval(GetFuncBody(exp), env);
+		return NewFuncValue(GetFuncFormalArg(exp), GetFuncBody(exp), NewClosure(env));
 		break;
 
 	case IfExp:
@@ -34,66 +32,26 @@ valueADT Eval(expADT exp, environmentADT env){
 		else
 			return Eval(GetIfElsePart(exp), NewClosure(env));
 		break;
-		/*if (controlExpression(GetIfRelOp(exp), GetIfLHSExpression(exp), GetIfRHSExpression(exp), env)) //check to see if control exp is valid
-			Eval(GetIfThenPart(exp), env);
-		else
-			Eval(GetIfElsePart(exp), env);
-		break;
-		*/
+	
 	case CallExp:
-		newEnviron = NewClosure(env);
 		callexpress = GetCallExp(exp);
 
-		valueCallArg = Eval(GetCallActualArg(exp), env); // argument for f
+		valueCallArg = GetCallActualArg(exp); // argument for f
 		valueCallExpress = Eval(callexpress, env);
 
-		if (ExpType(GetFuncValueBody(valueCallExpress)) == CompoundExp){
-			value = Eval(GetFuncValueBody(valueCallExpress), GetFuncValueClosure(valueCallExpress));
-			return value;
-		}
+		if (ValueType(valueCallExpress) == FuncValue){
+			//behöver inte skapa ny miljö utan ist hämta den som finns i funcvaluet.
+			newEnviron = GetFuncValueClosure(valueCallExpress);
 
-		if (ExpType(GetFuncValueBody(valueCallExpress)) == IdentifierExp){
-			funcname = ExpIdentifier(GetFuncValueBody(valueCallExpress)); //f
+			funcarg = GetFuncValueFormalArg(valueCallExpress);
 
-			valueBody = GetIdentifierValue(GetFuncValueClosure(valueCallExpress), funcname); //recall body of function with name f
-			funcarg = GetFuncFormalArg(GetFuncValueBody(valueBody));
-
-			if (ValueType(valueCallArg) == IntValue)
-				DefineIdentifier(env, funcarg, NewFuncExp("", NewIntegerExp(GetIntValue(valueCallArg))), newEnviron); //define argument of function in body
-			else
-				DefineIdentifier(env, funcarg, GetFuncValueBody(valueCallArg), newEnviron);//GetFuncValueClosure(valueCallArg)); //define argument of function in body
+			DefineIdentifier(newEnviron, funcarg, valueCallArg, env); //define argument of function in body
 			
-			valueCallExpress = Eval(GetFuncValueBody(valueBody), newEnviron);//GetFuncValueClosure(valueBody));
+			return Eval(GetFuncValueBody(valueCallExpress), newEnviron);
 		}
-
 		
-		return Eval(GetFuncValueBody(valueCallExpress), GetFuncValueClosure(valueCallExpress));//GetFuncValueClosure(valueCallExpress));
-		//funcarg = GetFuncValueFormalArg(Eval(GetFuncValueBody(valueBody), GetFuncValueClosure(valueBody)));  //argument of function when defined
+		return valueCallExpress;
 		
-		//return Eval(GetFuncValueBody(valueCallExpress), GetFuncValueClosure(valueCallExpress));
-			/*callexpress = GetCallExp(exp); //  f in f(E)
-			callarg = GetCallActualArg(exp);  // E in f(E)
-
-			if (ExpType(callarg) == CompoundExp){
-				value = Eval(callarg, env);
-				return value;
-			}
-			else if (ExpType(callarg) == CallExp){
-				value = Eval(callarg, env);
-				return value;
-			}
-			else
-				funcBody= GetFuncBody(callarg);  //body of E in f(E)
-
-			funcname = ExpIdentifier(GetFuncValueBody(callexpress)); // f
-
-			storedBody = GetIdentifierValue(env, funcname); //recall body of function with name f
-
-			storedBody = GetFuncValueBody(storedBody); //peel off a layer
-			funcarg = GetFuncValueFormalArg(storedBody);  //argument of function when defined
-			DefineIdentifier(env, funcarg, funcBody, GetFuncValueClosure(storedBody)); //define argument of function in body
-			return Eval(storedBody, GetFuncValueClosure(storedBody));
-			*/
 		break;
 
 	case ConstExp:
@@ -102,9 +60,7 @@ valueADT Eval(expADT exp, environmentADT env){
 
 	case IdentifierExp:
 		printf(" %s ", ExpIdentifier(exp));
-		//value = GetIdentifierValue( newEnviron, ExpIdentifier(exp));
 		value = GetIdentifierValue(env, ExpIdentifier(exp));
-	    //return value;
 		return Eval(GetFuncValueBody(value), GetFuncValueClosure(value));
 		break;
 
@@ -126,34 +82,14 @@ static int EvalCompound(expADT exp, environmentADT env){
 
     op = ExpOperator(exp);
 
-	//lhs = GetIntValue(Eval(ExpLHS(exp), env));
-	//rhs = GetIntValue(Eval(ExpRHS(exp), env));
 	lValue = Eval(ExpLHS(exp), NewClosure(env));
     rValue = Eval(ExpRHS(exp), NewClosure(env));
-
-	while (ValueType(lValue) == FuncValue)
-		lValue = Eval(GetFuncValueBody(lValue), GetFuncValueClosure(lValue));
 	
 	lhs = GetIntValue(lValue);
-
-	while (ValueType(rValue) == FuncValue)
-		rValue = Eval(GetFuncValueBody(rValue), GetFuncValueClosure(rValue));
-		
 	rhs = GetIntValue(rValue);
 		
 
-	/*if (ValueType(lValue) == IntValue)
-		lhs = GetIntValue(lValue);
-	else
-		Eval(GetFuncValueBody(lValue), GetFuncValueClosure(lValue));
 
-	if (ValueType(rValue) == IntValue)
-		rhs = GetIntValue(rValue);
-	else
-		Eval(GetFuncValueBody(rValue), GetFuncValueClosure(rValue));
-		*/
-	//lhs = GetIntValue(lfuncValue);
-	//rhs = GetIntValue(rfuncValue);
     switch (op) {
       case '+': return (lhs + rhs);
       case '-': return (lhs - rhs);
@@ -186,12 +122,6 @@ static bool controlExpression(char relOp, expADT expL, expADT expR, environmentA
 
 	leftV = Eval(expL, env);
 	rightV = Eval(expR, env);
-
-	while (ValueType(leftV) == FuncValue)
-		leftV = Eval(GetFuncValueBody(leftV), GetFuncValueClosure(leftV));
-
-	while (ValueType(rightV) == FuncValue)
-		rightV = Eval(GetFuncValueBody(rightV), GetFuncValueClosure(rightV));
 
 	if(ValueType(leftV) == IntValue && ValueType(rightV) == IntValue ){
 
