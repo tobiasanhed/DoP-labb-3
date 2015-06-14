@@ -59,7 +59,7 @@ valueADT Eval(expADT exp, environmentADT env){
 		break;
 
 	case IdentifierExp:
-		printf(" %s ", ExpIdentifier(exp));
+		//printf(" %s ", ExpIdentifier(exp));
 		value = GetIdentifierValue(env, ExpIdentifier(exp));
 		return Eval(GetFuncValueBody(value), GetFuncValueClosure(value));
 		break;
